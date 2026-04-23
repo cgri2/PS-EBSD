@@ -1,0 +1,1566 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="140mm"
+   height="120mm"
+   viewBox="0 0 140 120"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   sodipodi:docname="Procedure.svg"
+   inkscape:export-filename="Final_figures_vector\SI_Procedure.pdf"
+   inkscape:export-xdpi="600"
+   inkscape:export-ydpi="600"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="310.06632"
+     inkscape:cy="269.40768"
+     inkscape:window-width="1920"
+     inkscape:window-height="1010"
+     inkscape:window-x="3450"
+     inkscape:window-y="-6"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <marker
+       style="overflow:visible"
+       id="Triangle"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="0.5"
+       markerHeight="0.5"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-9" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-8"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="0.5"
+       markerHeight="0.5"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-8" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4-0"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="0.5"
+       markerHeight="0.5"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-9-6" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-8-9"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="0.5"
+       markerHeight="0.5"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-8-5" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4-0-3"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="0.5"
+       markerHeight="0.5"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-9-6-2" />
+    </marker>
+    <pattern
+       id="EMFhbasepattern"
+       patternUnits="userSpaceOnUse"
+       width="6"
+       height="6"
+       x="0"
+       y="0" />
+    <marker
+       style="overflow:visible"
+       id="Triangle-4-0-3-7"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="0.5"
+       markerHeight="0.5"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-9-6-2-5" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-8-9-1"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="0.5"
+       markerHeight="0.5"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-8-5-2" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-8-9-1-1"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="0.5"
+       markerHeight="0.5"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-8-5-2-3" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4-02"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-9-4" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4-02-9"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-9-4-0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4-0-8"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="0.5"
+       markerHeight="0.5"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-9-6-9" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g16-9-9-1-3-7-6-8"
+       transform="translate(19.17529,65.883026)">
+      <rect
+         style="fill:#aa4400;stroke:none;stroke-width:0.0650188;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-4-0-9-5-6-1-6"
+         width="11.934981"
+         height="6.9349813"
+         x="84.138016"
+         y="7.4238725" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="90.09082"
+         y="11.801213"
+         id="text2-12-7-3-8-6-5-5"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="90.09082"
+           y="11.801213"
+           id="tspan3-5-4-9-6-1-2-0">det<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan26-7-6-7-2">2</tspan></tspan></text>
+    </g>
+    <g
+       id="g17-2-1-4-6-4"
+       transform="translate(-27.019587,-0.42167819)">
+      <rect
+         style="fill:#004455;stroke:none;stroke-width:0.0650188;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-7-0-2-9-1-2"
+         width="11.934981"
+         height="6.9349813"
+         x="113.92738"
+         y="7.3988953" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="119.83282"
+         y="11.751259"
+         id="text2-12-7-3-8-6-2-7"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="119.83282"
+           y="11.751259"
+           id="tspan3-5-4-9-6-1-3-7">ori<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan26-7-6-2-9">0</tspan></tspan></text>
+    </g>
+    <g
+       id="g16-9-2"
+       transform="translate(-27.019587,-0.42167819)">
+      <rect
+         style="fill:#552200;stroke:none;stroke-width:0.0650188;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-4-7"
+         width="11.934981"
+         height="6.9349813"
+         x="84.138016"
+         y="7.4238725" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="90.043449"
+         y="11.776237"
+         id="text2-12-7-3-8-6-8-9"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="90.043449"
+           y="11.776237"
+           id="tspan3-5-4-9-6-1-5-5">det<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan26-7-6-76-4">0</tspan></tspan></text>
+    </g>
+    <g
+       id="g15"
+       transform="translate(-27.019587,-0.42167819)">
+      <rect
+         style="fill:#2d5016;stroke:none;stroke-width:0.065019;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2"
+         width="11.93498"
+         height="6.9349809"
+         x="52.637497"
+         y="7.3988957" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="58.541813"
+         y="11.737264"
+         id="text2"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="58.541813"
+           y="11.737264"
+           id="tspan3">pat<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan6">0</tspan></tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+       x="31.976856"
+       y="17.078119"
+       id="text2-0"><tspan
+         sodipodi:role="line"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Italic';fill:#000000;stroke:none;stroke-width:0.2"
+         x="31.976856"
+         y="17.078119"
+         id="tspan3-0">pattern file (up2, h5)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:30.5734;display:inline;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+       x="94.923515"
+       y="20.319149"
+       id="text2-0-0"
+       transform="translate(-31.497929,-3.2255243)"><tspan
+         x="94.923515"
+         y="20.319149"
+         id="tspan4"><tspan
+   style="font-style:italic;-inkscape-font-specification:'Arial, MS PGothic, SimSun Italic';fill:#000000;stroke:none"
+   id="tspan2">detector geometry and</tspan><tspan
+   y="20.319149"
+   id="tspan9"> </tspan></tspan><tspan
+         x="94.923515"
+         y="23.853781"
+         id="tspan14"><tspan
+           style="font-style:italic;-inkscape-font-specification:'Arial, MS PGothic, SimSun Italic';fill:#000000;stroke:none"
+           id="tspan13">shape parameters</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:30.5734;display:inline;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+       x="94.923515"
+       y="20.319149"
+       id="text2-0-0-1"
+       transform="translate(-2.0894983,-3.2255243)"><tspan
+         x="94.923515"
+         y="20.319149"
+         id="tspan16"><tspan
+   style="font-style:italic;-inkscape-font-specification:'Arial, MS PGothic, SimSun Italic';fill:#000000;stroke:none"
+   id="tspan15">initial orientations</tspan><tspan
+   y="20.319149"
+   id="tspan17"> </tspan></tspan><tspan
+         x="94.923515"
+         y="23.853781"
+         id="tspan19"><tspan
+           style="font-style:italic;-inkscape-font-specification:'Arial, MS PGothic, SimSun Italic';fill:#000000;stroke:none"
+           id="tspan18">(Hough indexing)</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:30.5734;display:inline;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+       x="94.923515"
+       y="20.319149"
+       id="text2-0-0-1-1"
+       transform="translate(25.588198,-3.2255243)"><tspan
+         x="94.923515"
+         y="20.319149"
+         id="tspan21"><tspan
+   style="font-style:italic;-inkscape-font-specification:'Arial, MS PGothic, SimSun Italic';fill:#000000;stroke:none"
+   id="tspan20">simulated master</tspan><tspan
+   y="20.319149"
+   id="tspan22"> </tspan></tspan><tspan
+         x="94.923515"
+         y="23.853781"
+         id="tspan25"><tspan
+           style="font-style:italic;-inkscape-font-specification:'Arial, MS PGothic, SimSun Italic';fill:#000000;stroke:none"
+           id="tspan24">pattern</tspan></tspan></text>
+    <g
+       id="g18"
+       transform="translate(-27.019587,-0.42167819)">
+      <rect
+         style="fill:#550044;stroke:none;stroke-width:0.065019;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-3"
+         width="11.93498"
+         height="6.9349809"
+         x="140.69168"
+         y="7.4238729" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:47.6566;display:inline;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="86.328552"
+         y="6.3537741"
+         id="text2-1-2-49"
+         transform="translate(60.287982,5.1249785)"><tspan
+           x="86.328552"
+           y="6.3537741"
+           id="tspan28"><tspan
+             style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none"
+             id="tspan27">mp</tspan></tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#ffffff;stroke:none;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+       x="75.215782"
+       y="4.3047161"
+       id="text7"><tspan
+         sodipodi:role="line"
+         id="tspan7"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#000000;stroke-width:0.2"
+         x="75.215782"
+         y="4.3047161">Initial data from EBSD acquisition software</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#ffffff;stroke:none;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+       x="74.198143"
+       y="29.586903"
+       id="text7-6"><tspan
+         sodipodi:role="line"
+         id="tspan7-8"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#000000;stroke-width:0.2"
+         x="74.198143"
+         y="29.586903">Part 1: Pre-processing and calibration</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#ffffff;stroke:none;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+       x="75.249649"
+       y="92.337654"
+       id="text7-6-1"><tspan
+         sodipodi:role="line"
+         id="tspan7-8-8"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#000000;stroke-width:0.2"
+         x="75.249649"
+         y="92.337654">Part 2: Reindexing</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52777px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#1a1a1a;stroke:none;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+       x="22.788441"
+       y="38.041996"
+       id="text8"><tspan
+         sodipodi:role="line"
+         id="tspan8"
+         style="stroke-width:0.2"
+         x="22.788441"
+         y="38.041996" /></text>
+    <g
+       id="g21"
+       transform="translate(22.835508,-6.29487)">
+      <rect
+         style="fill:#1a1a1a;stroke:none;stroke-width:0.125581;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect8"
+         width="38.529202"
+         height="12.853505"
+         x="33.16584"
+         y="42.13271" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52777px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:36.9082;display:inline;fill:#1a1a1a;stroke:none;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="43.439922"
+         y="36.020439"
+         id="text9"
+         transform="translate(8.9133595,11.247111)"><tspan
+           x="43.439922"
+           y="36.020439"
+           id="tspan30"><tspan
+   style="fill:#ffffff"
+   id="tspan29">Optimized pattern</tspan><tspan
+   y="36.020439"
+   id="tspan31"> </tspan></tspan><tspan
+           x="43.439922"
+           y="40.430153"
+           id="tspan33"><tspan
+             style="fill:#ffffff"
+             id="tspan32">processing</tspan></tspan></text>
+    </g>
+    <g
+       id="g19"
+       transform="translate(-26.322741,10.960028)">
+      <rect
+         style="fill:#4d4d4d;stroke:none;stroke-width:0.125581;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect8-1"
+         width="38.529202"
+         height="12.853505"
+         x="82.324089"
+         y="42.13271" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52777px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:36.9082;display:inline;fill:#1a1a1a;stroke:none;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="43.439922"
+         y="36.020439"
+         id="text9-2"
+         transform="translate(58.026827,13.800783)"><tspan
+           x="43.439922"
+           y="36.020439"
+           id="tspan35"><tspan
+             style="fill:#ffffff"
+             id="tspan34">PSS-NPA</tspan></tspan></text>
+    </g>
+    <g
+       id="g20"
+       transform="translate(-72.445853,28.21493)">
+      <rect
+         style="fill:#999999;stroke:none;stroke-width:0.125581;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect8-1-8"
+         width="38.529202"
+         height="12.853505"
+         x="128.44727"
+         y="42.13271" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52777px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:36.9082;display:inline;fill:#1a1a1a;stroke:none;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="43.439922"
+         y="36.020439"
+         id="text9-2-7"
+         transform="translate(104.14399,11.597649)"><tspan
+           x="43.439922"
+           y="36.020439"
+           id="tspan37"><tspan
+   style="fill:#ffffff"
+   id="tspan36">DIC-based geometry</tspan><tspan
+   y="36.020439"
+   id="tspan40"> </tspan></tspan><tspan
+           x="43.439922"
+           y="40.430153"
+           id="tspan43"><tspan
+             style="fill:#ffffff"
+             id="tspan41">refinement</tspan></tspan></text>
+    </g>
+    <g
+       id="g15-8"
+       transform="translate(-17.390407,27.930713)">
+      <rect
+         style="fill:#005500;stroke:none;stroke-width:0.065019;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-0"
+         width="11.93498"
+         height="6.9349809"
+         x="52.637497"
+         y="7.3988957" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="58.541813"
+         y="11.737264"
+         id="text2-12"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="58.541813"
+           y="11.737264"
+           id="tspan3-5">pat<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan6-0">0</tspan></tspan></text>
+    </g>
+    <g
+       id="g15-8-3"
+       transform="translate(50.675917,27.930713)">
+      <rect
+         style="fill:#447821;stroke:none;stroke-width:0.065019;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-0-3"
+         width="11.93498"
+         height="6.9349809"
+         x="52.637497"
+         y="7.3988957" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="58.541813"
+         y="11.737264"
+         id="text2-12-7"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="58.541813"
+           y="11.737264"
+           id="tspan3-5-4">pat<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan23">1</tspan></tspan></text>
+    </g>
+    <g
+       id="g15-8-3-20"
+       transform="translate(50.675917,48.653102)">
+      <rect
+         style="fill:#5aa02c;stroke:none;stroke-width:0.065019;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-0-3-0"
+         width="11.93498"
+         height="6.9349809"
+         x="52.637497"
+         y="7.3988957" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="58.541813"
+         y="11.737264"
+         id="text2-12-7-3"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="58.541813"
+           y="11.737264"
+           id="tspan3-5-4-9">pat<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan26">2</tspan></tspan></text>
+    </g>
+    <g
+       id="g16-9"
+       transform="translate(-48.890928,34.840717)">
+      <rect
+         style="fill:#552200;stroke:none;stroke-width:0.0650188;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-4"
+         width="11.934981"
+         height="6.9349813"
+         x="84.138016"
+         y="7.4238725" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="90.043449"
+         y="11.776237"
+         id="text2-12-7-3-8-6-8"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="90.043449"
+           y="11.776237"
+           id="tspan3-5-4-9-6-1-5">det<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan26-7-6-76">0</tspan></tspan></text>
+    </g>
+    <g
+       id="g18-0"
+       transform="translate(-117.37956,34.840717)">
+      <rect
+         style="fill:#550044;stroke:none;stroke-width:0.065019;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-3-6"
+         width="11.93498"
+         height="6.9349809"
+         x="140.69168"
+         y="7.4238729" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:47.6566;display:inline;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="86.328552"
+         y="6.3537741"
+         id="text2-1-2-49-1"
+         transform="translate(60.287982,5.1249785)"><tspan
+           x="86.328552"
+           y="6.3537741"
+           id="tspan65"><tspan
+             style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none"
+             id="tspan44">mp</tspan></tspan></text>
+    </g>
+    <path
+       style="fill:#808080;stroke:#808080;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle);paint-order:fill markers stroke"
+       d="m 48.599294,42.26459 h 4.7457"
+       id="path23"
+       sodipodi:nodetypes="cc" />
+    <g
+       id="g15-8-3-2"
+       transform="translate(-17.390409,48.715593)">
+      <rect
+         style="fill:#447821;stroke:none;stroke-width:0.065019;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-0-3-2"
+         width="11.93498"
+         height="6.9349809"
+         x="52.637497"
+         y="7.3988957" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="58.541813"
+         y="11.737264"
+         id="text2-12-7-8"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="58.541813"
+           y="11.737264"
+           id="tspan3-5-4-2">pat<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan23-8">1</tspan></tspan></text>
+    </g>
+    <path
+       style="fill:#808080;stroke:#808080;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle-8);paint-order:fill markers stroke"
+       d="m 48.599294,59.519491 h 4.7457"
+       id="path23-24"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#808080;stroke:#808080;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle-4-0);paint-order:fill markers stroke"
+       d="m 95.911353,59.519488 h 4.745697"
+       id="path23-2-6"
+       sodipodi:nodetypes="cc" />
+    <g
+       id="g15-8-3-20-2"
+       transform="translate(-17.390414,62.440516)">
+      <rect
+         style="fill:#5aa02c;stroke:none;stroke-width:0.065019;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-0-3-0-5"
+         width="11.93498"
+         height="6.9349809"
+         x="52.637497"
+         y="7.3988957" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="58.541813"
+         y="11.737264"
+         id="text2-12-7-3-8"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="58.541813"
+           y="11.737264"
+           id="tspan3-5-4-9-6">pat<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan26-7">2</tspan></tspan></text>
+    </g>
+    <g
+       id="g16-9-9-1-3"
+       transform="translate(-48.890933,69.35052)">
+      <rect
+         style="fill:#803300;stroke:none;stroke-width:0.0650188;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-4-0-9-5"
+         width="11.934981"
+         height="6.9349813"
+         x="84.138016"
+         y="7.4238725" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:47.6566;display:inline;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="86.328552"
+         y="6.3537741"
+         id="text2-1-7-7-6-7"
+         transform="translate(3.7615746,5.4334435)"><tspan
+           x="86.328552"
+           y="6.3537741"
+           id="tspan69"><tspan
+             style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none"
+             id="tspan66">det</tspan><tspan
+             style="font-size:65%;baseline-shift:sub"
+             id="tspan67">1</tspan><tspan
+             style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none"
+             id="tspan68">
+</tspan></tspan></text>
+    </g>
+    <g
+       id="g16-9-9-1-3-7-6"
+       transform="translate(-69.298884,99.316815)">
+      <rect
+         style="fill:#aa4400;stroke:none;stroke-width:0.0650188;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-4-0-9-5-6-1"
+         width="11.934981"
+         height="6.9349813"
+         x="84.138016"
+         y="7.4238725" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="90.09082"
+         y="11.801213"
+         id="text2-12-7-3-8-6-5"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="90.09082"
+           y="11.801213"
+           id="tspan3-5-4-9-6-1-2">det<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan26-7-6-7">2</tspan></tspan></text>
+    </g>
+    <g
+       id="g16-9-9-1-3-8"
+       transform="translate(19.175397,34.840717)">
+      <rect
+         style="fill:#803300;stroke:none;stroke-width:0.0650188;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-4-0-9-5-8"
+         width="11.934981"
+         height="6.9349813"
+         x="84.138016"
+         y="7.4238725" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:47.6566;display:inline;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="86.328552"
+         y="6.3537741"
+         id="text2-1-7-7-6-7-24"
+         transform="translate(3.7615746,5.4334435)"><tspan
+           x="86.328552"
+           y="6.3537741"
+           id="tspan73"><tspan
+             style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none"
+             id="tspan70">det</tspan><tspan
+             style="font-size:65%;baseline-shift:sub"
+             id="tspan71">1</tspan><tspan
+             style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none"
+             id="tspan72">
+</tspan></tspan></text>
+    </g>
+    <g
+       id="g17-2-1-4"
+       transform="translate(-90.615282,62.440516)">
+      <rect
+         style="fill:#004455;stroke:none;stroke-width:0.0650188;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-7-0-2-9"
+         width="11.934981"
+         height="6.9349813"
+         x="113.92738"
+         y="7.3988953" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:47.6566;display:inline;fill:#ffffff;stroke:none;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="86.328552"
+         y="6.3537741"
+         id="text2-1-2-1-4-1"
+         transform="translate(33.552663,5.4334437)"><tspan
+           x="86.328552"
+           y="6.3537741"
+           id="tspan76"><tspan
+             style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold'"
+             id="tspan74">ori</tspan><tspan
+             style="font-size:65%;baseline-shift:sub"
+             id="tspan75">0</tspan></tspan></text>
+    </g>
+    <g
+       id="g18-0-2-3"
+       transform="translate(-117.37957,69.35052)">
+      <rect
+         style="fill:#550044;stroke:none;stroke-width:0.065019;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-3-6-6-9"
+         width="11.93498"
+         height="6.9349809"
+         x="140.69168"
+         y="7.4238729" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:47.6566;display:inline;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="86.328552"
+         y="6.3537741"
+         id="text2-1-2-49-1-5-3"
+         transform="translate(60.287982,5.1249785)"><tspan
+           x="86.328552"
+           y="6.3537741"
+           id="tspan78"><tspan
+             style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none"
+             id="tspan77">mp</tspan></tspan></text>
+    </g>
+    <g
+       id="g15-8-3-20-2-4"
+       transform="translate(-37.798365,92.406811)">
+      <rect
+         style="fill:#5aa02c;stroke:none;stroke-width:0.065019;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-0-3-0-5-1"
+         width="11.93498"
+         height="6.9349809"
+         x="52.637497"
+         y="7.3988957" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="58.541813"
+         y="11.737264"
+         id="text2-12-7-3-8-6"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="58.541813"
+           y="11.737264"
+           id="tspan3-5-4-9-6-1">pat<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan26-7-6">2</tspan></tspan></text>
+    </g>
+    <g
+       id="g17-2-1-4-6"
+       transform="translate(-111.02324,92.406811)">
+      <rect
+         style="fill:#004455;stroke:none;stroke-width:0.0650188;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-7-0-2-9-1"
+         width="11.934981"
+         height="6.9349813"
+         x="113.92738"
+         y="7.3988953" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="119.83282"
+         y="11.751259"
+         id="text2-12-7-3-8-6-2"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="119.83282"
+           y="11.751259"
+           id="tspan3-5-4-9-6-1-3">ori<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan26-7-6-2">0</tspan></tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:47.6566;display:inline;fill:#ffffff;stroke:none;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+       x="86.328552"
+       y="6.3537741"
+       id="text2-1-2-1-4-1-8-8"
+       transform="translate(12.709635,92.119679)"><tspan
+         x="86.328552"
+         y="6.3537741"
+         id="tspan81"><tspan
+           style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold'"
+           id="tspan79">ori</tspan><tspan
+           style="font-size:65%;baseline-shift:sub"
+           id="tspan80">1</tspan></tspan></text>
+    <g
+       id="g18-0-2-3-4"
+       transform="translate(-137.78753,99.316819)">
+      <rect
+         style="fill:#550044;stroke:none;stroke-width:0.065019;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-3-6-6-9-6"
+         width="11.93498"
+         height="6.9349809"
+         x="140.69168"
+         y="7.4238729" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:47.6566;display:inline;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="86.328552"
+         y="6.3537741"
+         id="text2-1-2-49-1-5-3-2"
+         transform="translate(60.287982,5.1249785)"><tspan
+           x="86.328552"
+           y="6.3537741"
+           id="tspan83"><tspan
+             style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none"
+             id="tspan82">mp</tspan></tspan></text>
+    </g>
+    <path
+       style="fill:#808080;stroke:#808080;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle-8-9);paint-order:fill markers stroke"
+       d="m 48.599446,76.774392 h 4.7457"
+       id="path23-24-9"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#808080;stroke:#808080;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle-8-9-1);paint-order:fill markers stroke"
+       d="m 30.140752,106.42992 h 4.7457"
+       id="path23-24-9-0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#808080;stroke:#808080;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle-8-9-1-1);paint-order:fill markers stroke"
+       d="m 114.33731,106.42992 h 4.74572"
+       id="path23-24-9-0-3"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#808080;stroke:#808080;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle-4-0-3);paint-order:fill markers stroke"
+       d="m 95.911343,76.77439 h 4.745697"
+       id="path23-2-6-9"
+       sodipodi:nodetypes="cc" />
+    <g
+       id="g63"
+       transform="translate(-35.44092,-29.299876)">
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:0.343677;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:2.3;stroke-dasharray:0.343677, 0.343677;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect31"
+         width="72.222878"
+         height="22.89806"
+         x="74.579132"
+         y="123.7542" />
+      <rect
+         style="fill:#f2f2f2;stroke:#ffffff;stroke-width:0.0790312;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-7-0-2-9-1-2-5-4"
+         width="17.836653"
+         height="6.8559694"
+         x="88.438019"
+         y="139.28345" />
+      <g
+         id="g60">
+        <rect
+           style="fill:#006680;stroke:#ffffff;stroke-width:0.0645405;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+           id="rect2-5-7-0-2-9-1-2-5"
+           width="11.87046"
+           height="6.8704596"
+           x="75.046921"
+           y="124.28654" />
+        <text
+           xml:space="preserve"
+           style="font-style:italic;font-variant:normal;font-weight:400;font-size:3.96875px;line-height:125%;font-family:'Times New Roman';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+           x="75.496735"
+           y="128.63472"
+           id="text4"><tspan
+             sodipodi:role="line"
+             x="75.496735"
+             y="128.63472"
+             id="tspan4-0"
+             style="fill:#ffffff;stroke-width:0.264583"><tspan
+               dx="0 0 0 0 0 0 0 0"
+               dy="0 0 0 0 0 0 0 0"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke-width:0.264583"
+               id="tspan3-7">ori<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan38">1</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan49">(</tspan><tspan
+   style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman,  Italic'"
+   id="tspan39">θ</tspan><tspan
+   id="tspan42"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:65%;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';baseline-shift:sub">1</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan50">)</tspan></tspan></tspan></text>
+      </g>
+      <path
+         style="fill:#808080;stroke:#808080;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle-4-0-3-7);paint-order:fill markers stroke"
+         d="m 107.67995,142.788 h 4.7457"
+         id="path23-2-6-9-3"
+         sodipodi:nodetypes="cc" />
+      <rect
+         style="fill:#f2f2f2;stroke:#ffffff;stroke-width:0.0645405;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-7-0-2-9-1-2-5-1"
+         width="11.87046"
+         height="6.8704596"
+         x="75.046921"
+         y="131.157" />
+      <text
+         xml:space="preserve"
+         style="font-style:italic;font-variant:normal;font-weight:400;font-size:3.52778px;line-height:125%;font-family:'Times New Roman';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         x="75.283661"
+         y="135.43973"
+         id="text4-9"><tspan
+           sodipodi:role="line"
+           x="75.283661"
+           y="135.43973"
+           id="tspan4-0-1"
+           style="font-size:3.52778px;fill:#000000;stroke-width:0.264583">CI<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan45">PS</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan46">(</tspan>θ<tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan47"><tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan48">1</tspan>)</tspan></tspan></text>
+      <g
+         id="g35-3"
+         transform="translate(20.156516,-11.277225)">
+        <rect
+           style="fill:#006680;stroke:#ffffff;stroke-width:0.0645405;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+           id="rect2-5-7-0-2-9-1-2-5-9"
+           width="11.87046"
+           height="6.8704596"
+           x="66.760864"
+           y="135.56377" />
+        <text
+           xml:space="preserve"
+           style="font-style:italic;font-variant:normal;font-weight:400;font-size:3.96875px;line-height:125%;font-family:'Times New Roman';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+           x="67.210678"
+           y="139.91194"
+           id="text4-95"><tspan
+             sodipodi:role="line"
+             x="67.210678"
+             y="139.91194"
+             id="tspan4-0-9"
+             style="fill:#ffffff;stroke-width:0.264583"><tspan
+               dx="0 0 0 0 0 0 0 0"
+               dy="0 0 0 0 0 0 0 0"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke-width:0.264583"
+               id="tspan3-7-2">ori<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan38-5">1</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan52">(</tspan><tspan
+   style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman,  Italic'"
+   id="tspan39-3">θ</tspan><tspan
+   id="tspan42-2"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:65%;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';baseline-shift:sub">2</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan51">)</tspan></tspan></tspan></text>
+      </g>
+      <rect
+         style="fill:#f2f2f2;stroke:#ffffff;stroke-width:0.0645405;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-7-0-2-9-1-2-5-1-4"
+         width="11.87046"
+         height="6.8704596"
+         x="86.917389"
+         y="131.157" />
+      <text
+         xml:space="preserve"
+         style="font-style:italic;font-variant:normal;font-weight:400;font-size:3.52778px;line-height:125%;font-family:'Times New Roman';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         x="87.154129"
+         y="135.43973"
+         id="text4-9-4"><tspan
+           sodipodi:role="line"
+           x="87.154129"
+           y="135.43973"
+           id="tspan4-0-1-4"
+           style="font-size:3.52778px;fill:#000000;stroke-width:0.264583">CI<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan45-2">PS</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan46-7">(</tspan>θ<tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan47-9"><tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan48-2">2</tspan>)</tspan></tspan></text>
+      <g
+         id="g35-1"
+         transform="translate(32.026977,-11.277225)">
+        <rect
+           style="fill:#006680;stroke:#ffffff;stroke-width:0.0645405;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+           id="rect2-5-7-0-2-9-1-2-5-5"
+           width="11.87046"
+           height="6.8704596"
+           x="66.760864"
+           y="135.56377" />
+        <text
+           xml:space="preserve"
+           style="font-style:italic;font-variant:normal;font-weight:400;font-size:3.96875px;line-height:125%;font-family:'Times New Roman';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+           x="67.210678"
+           y="139.91194"
+           id="text4-7"><tspan
+             sodipodi:role="line"
+             x="67.210678"
+             y="139.91194"
+             id="tspan4-0-8"
+             style="fill:#ffffff;stroke-width:0.264583"><tspan
+               dx="0 0 0 0 0 0 0 0"
+               dy="0 0 0 0 0 0 0 0"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke-width:0.264583"
+               id="tspan3-7-5">ori<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan38-3">1</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan53">(</tspan><tspan
+   style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman,  Italic'"
+   id="tspan39-2">θ</tspan><tspan
+   id="tspan42-4"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:65%;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';baseline-shift:sub">3</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan54">)</tspan></tspan></tspan></text>
+      </g>
+      <rect
+         style="fill:#f2f2f2;stroke:#ffffff;stroke-width:0.0645405;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-7-0-2-9-1-2-5-1-1"
+         width="11.87046"
+         height="6.8704596"
+         x="98.787842"
+         y="131.157" />
+      <text
+         xml:space="preserve"
+         style="font-style:italic;font-variant:normal;font-weight:400;font-size:3.52778px;line-height:125%;font-family:'Times New Roman';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         x="99.024582"
+         y="135.43973"
+         id="text4-9-1"><tspan
+           sodipodi:role="line"
+           x="99.024582"
+           y="135.43973"
+           id="tspan4-0-1-5"
+           style="font-size:3.52778px;fill:#000000;stroke-width:0.264583">CI<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan45-9">PS</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan46-5">(</tspan>θ<tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan47-1"><tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan48-0">3</tspan>)</tspan></tspan></text>
+      <g
+         id="g35-30"
+         transform="translate(43.897438,-11.277225)">
+        <rect
+           style="fill:#006680;stroke:#ffffff;stroke-width:0.0645405;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+           id="rect2-5-7-0-2-9-1-2-5-8"
+           width="11.87046"
+           height="6.8704596"
+           x="66.760864"
+           y="135.56377" />
+        <text
+           xml:space="preserve"
+           style="font-style:italic;font-variant:normal;font-weight:400;font-size:3.96875px;line-height:125%;font-family:'Times New Roman';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+           x="67.210678"
+           y="139.91194"
+           id="text4-91"><tspan
+             sodipodi:role="line"
+             x="67.210678"
+             y="139.91194"
+             id="tspan4-0-3"
+             style="fill:#ffffff;stroke-width:0.264583"><tspan
+               dx="0 0 0 0 0 0 0 0"
+               dy="0 0 0 0 0 0 0 0"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke-width:0.264583"
+               id="tspan3-7-4">ori<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan38-4">1</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan55">(</tspan><tspan
+   style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman,  Italic'"
+   id="tspan39-6">θ</tspan><tspan
+   id="tspan42-3"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:65%;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';baseline-shift:sub">4</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan56">)</tspan></tspan></tspan></text>
+      </g>
+      <rect
+         style="fill:#f2f2f2;stroke:#ffffff;stroke-width:0.0645405;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-7-0-2-9-1-2-5-1-6"
+         width="11.87046"
+         height="6.8704596"
+         x="110.6583"
+         y="131.157" />
+      <text
+         xml:space="preserve"
+         style="font-style:italic;font-variant:normal;font-weight:400;font-size:3.52778px;line-height:125%;font-family:'Times New Roman';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         x="110.89504"
+         y="135.43973"
+         id="text4-9-5"><tspan
+           sodipodi:role="line"
+           x="110.89504"
+           y="135.43973"
+           id="tspan4-0-1-2"
+           style="font-size:3.52778px;fill:#000000;stroke-width:0.264583">CI<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan45-8">PS</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan46-1">(</tspan>θ<tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan47-0"><tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan48-3">4</tspan>)</tspan></tspan></text>
+      <rect
+         style="fill:#f2f2f2;stroke:#ffffff;stroke-width:0.0645405;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-7-0-2-9-1-2-5-1-4-1"
+         width="11.87046"
+         height="6.8704596"
+         x="122.52877"
+         y="131.157" />
+      <text
+         xml:space="preserve"
+         style="font-style:italic;font-variant:normal;font-weight:400;font-size:3.52778px;line-height:125%;font-family:'Times New Roman';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         x="122.76551"
+         y="135.43973"
+         id="text4-9-4-5"><tspan
+           sodipodi:role="line"
+           x="122.76551"
+           y="135.43973"
+           id="tspan4-0-1-4-5"
+           style="font-size:3.52778px;fill:#000000;stroke-width:0.264583">CI<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan45-2-2">PS</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan46-7-2">(</tspan>θ<tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan47-9-1"><tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan48-2-7">5</tspan>)</tspan></tspan></text>
+      <g
+         id="g35-1-4"
+         transform="translate(67.63836,-11.277225)">
+        <rect
+           style="fill:#006680;stroke:#ffffff;stroke-width:0.0645405;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+           id="rect2-5-7-0-2-9-1-2-5-5-8"
+           width="11.87046"
+           height="6.8704596"
+           x="66.760864"
+           y="135.56377" />
+        <text
+           xml:space="preserve"
+           style="font-style:italic;font-variant:normal;font-weight:400;font-size:3.96875px;line-height:125%;font-family:'Times New Roman';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+           x="67.210678"
+           y="139.91194"
+           id="text4-7-2"><tspan
+             sodipodi:role="line"
+             x="67.210678"
+             y="139.91194"
+             id="tspan4-0-8-3"
+             style="fill:#ffffff;stroke-width:0.264583"><tspan
+               dx="0 0 0 0 0 0 0 0"
+               dy="0 0 0 0 0 0 0 0"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke-width:0.264583"
+               id="tspan3-7-5-6">ori<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan38-3-0">1</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan59">(</tspan><tspan
+   style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman,  Italic'"
+   id="tspan39-2-3">θ</tspan><tspan
+   id="tspan42-4-5"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:65%;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';baseline-shift:sub">6</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan60">)</tspan></tspan></tspan></text>
+      </g>
+      <rect
+         style="fill:#f2f2f2;stroke:#ffffff;stroke-width:0.0645405;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-7-0-2-9-1-2-5-1-1-2"
+         width="11.87046"
+         height="6.8704596"
+         x="134.39923"
+         y="131.157" />
+      <text
+         xml:space="preserve"
+         style="font-style:italic;font-variant:normal;font-weight:400;font-size:3.52778px;line-height:125%;font-family:'Times New Roman';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         x="134.63597"
+         y="135.43973"
+         id="text4-9-1-8"><tspan
+           sodipodi:role="line"
+           x="134.63597"
+           y="135.43973"
+           id="tspan4-0-1-5-0"
+           style="font-size:3.52778px;fill:#000000;stroke-width:0.264583">CI<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan45-9-7">PS</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan46-5-2">(</tspan>θ<tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan47-1-2"><tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan48-0-5">6</tspan>)</tspan></tspan></text>
+      <rect
+         style="fill:#006680;stroke:#ffffff;stroke-width:0.0645405;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-7-0-2-9-1-2-5-9-9"
+         width="11.87046"
+         height="6.8704596"
+         x="122.52875"
+         y="124.28653" />
+      <text
+         xml:space="preserve"
+         style="font-style:italic;font-variant:normal;font-weight:400;font-size:3.96875px;line-height:125%;font-family:'Times New Roman';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         x="122.97857"
+         y="128.6347"
+         id="text4-95-1"><tspan
+           sodipodi:role="line"
+           x="122.97857"
+           y="128.6347"
+           id="tspan4-0-9-0"
+           style="fill:#ffffff;stroke-width:0.264583"><tspan
+             dx="0 0 0 0 0 0 0 0"
+             dy="0 0 0 0 0 0 0 0"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke-width:0.264583"
+             id="tspan3-7-2-8">ori<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan38-5-0">1</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan57">(</tspan><tspan
+   style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman,  Italic'"
+   id="tspan39-3-7">θ</tspan><tspan
+   id="tspan42-2-9"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:65%;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';baseline-shift:sub">5</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
+   id="tspan58">)</tspan></tspan></tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:italic;font-variant:normal;font-weight:400;font-size:3.52778px;line-height:125%;font-family:'Times New Roman';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         x="90.247604"
+         y="143.55893"
+         id="text4-9-8"><tspan
+           sodipodi:role="line"
+           x="90.247604"
+           y="143.55893"
+           id="tspan4-0-1-59"
+           style="font-size:3.52778px;fill:#000000;stroke-width:0.264583">max<tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';fill:#000000"
+   id="tspan61">(</tspan>CI<tspan
+   style="font-size:65%;baseline-shift:sub;fill:#000000"
+   id="tspan63">PS</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';fill:#000000"
+   id="tspan62">)</tspan></tspan></text>
+      <g
+         id="g35-1-4-7"
+         transform="translate(48.338362,3.712445)">
+        <rect
+           style="fill:#006680;stroke:#ffffff;stroke-width:0.0645405;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+           id="rect2-5-7-0-2-9-1-2-5-5-8-9"
+           width="11.87046"
+           height="6.8704596"
+           x="66.760864"
+           y="135.56377" />
+        <text
+           xml:space="preserve"
+           style="font-style:italic;font-variant:normal;font-weight:400;font-size:3.96875px;line-height:125%;font-family:'Times New Roman';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+           x="69.920296"
+           y="139.90884"
+           id="text4-7-2-6"><tspan
+             sodipodi:role="line"
+             x="69.920296"
+             y="139.90884"
+             id="tspan4-0-8-3-1"
+             style="fill:#ffffff;stroke-width:0.264583"><tspan
+               dx="0 0 0 0"
+               dy="0 0 0 0"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke-width:0.264583"
+               id="tspan3-7-5-6-7">ori<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan38-3-0-7">1</tspan></tspan></tspan></text>
+      </g>
+    </g>
+    <g
+       id="g35-1-4-7-5"
+       transform="translate(56.434361,-32.569077)">
+      <rect
+         style="fill:#006680;stroke:#ffffff;stroke-width:0.0645405;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-7-0-2-9-1-2-5-5-8-9-6"
+         width="11.87046"
+         height="6.8704596"
+         x="66.760864"
+         y="135.56377" />
+      <text
+         xml:space="preserve"
+         style="font-style:italic;font-variant:normal;font-weight:400;font-size:3.96875px;line-height:125%;font-family:'Times New Roman';text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         x="69.920296"
+         y="139.90884"
+         id="text4-7-2-6-8"><tspan
+           sodipodi:role="line"
+           x="69.920296"
+           y="139.90884"
+           id="tspan4-0-8-3-1-0"
+           style="fill:#ffffff;stroke-width:0.264583"><tspan
+             dx="0 0 0 0"
+             dy="0 0 0 0"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke-width:0.264583"
+             id="tspan3-7-5-6-7-7">ori<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan38-3-0-7-7">1</tspan></tspan></tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#f2f2f2;stroke:#ffffff;stroke-width:0.349999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:2.3;stroke-dasharray:0.349999, 0.349999;stroke-dashoffset:0;paint-order:fill markers stroke"
+       x="75.194984"
+       y="33.315189"
+       id="text64"><tspan
+         sodipodi:role="line"
+         id="tspan64"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Italic';fill:#000000;stroke:none;stroke-width:0.35"
+         x="75.194984"
+         y="33.315189">optional modules</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.82223px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;stroke-width:0.349999;stroke-miterlimit:2.3;stroke-dasharray:0.349999, 0.349999;paint-order:fill markers stroke"
+       x="57.475853"
+       y="38.387215"
+       id="text1"><tspan
+         sodipodi:role="line"
+         id="tspan1"
+         style="fill:#ffffff;stroke-width:0.35"
+         x="57.475853"
+         y="38.387215">A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.82223px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;stroke-width:0.349999;stroke-miterlimit:2.3;stroke-dasharray:0.349999, 0.349999;paint-order:fill markers stroke"
+       x="57.475918"
+       y="72.897018"
+       id="text1-5"><tspan
+         sodipodi:role="line"
+         id="tspan1-1"
+         style="fill:#ffffff;stroke-width:0.35"
+         x="57.475918"
+         y="72.897018">C</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.82223px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;stroke-width:0.349999;stroke-miterlimit:2.3;stroke-dasharray:0.349999, 0.349999;paint-order:fill markers stroke"
+       x="57.475853"
+       y="55.642113"
+       id="text1-8"><tspan
+         sodipodi:role="line"
+         id="tspan1-8"
+         style="fill:#ffffff;stroke-width:0.35"
+         x="57.475853"
+         y="55.642113">B</tspan></text>
+    <g
+       id="g17-2-1-4-6-3"
+       transform="translate(-90.615276,27.930713)">
+      <rect
+         style="fill:#004455;stroke:none;stroke-width:0.0650188;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-7-0-2-9-1-3"
+         width="11.934981"
+         height="6.9349813"
+         x="113.92738"
+         y="7.3988953" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="119.83282"
+         y="11.751259"
+         id="text2-12-7-3-8-6-2-4"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="119.83282"
+           y="11.751259"
+           id="tspan3-5-4-9-6-1-3-1">ori<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan26-7-6-2-1">0</tspan></tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#808080;stroke-width:0.349999;stroke-miterlimit:2.3;stroke-dasharray:0.349999, 0.349999;marker-end:url(#Triangle-4);paint-order:fill markers stroke;stroke-opacity:1"
+       d="m 115.2484,38.797099 1.93329,10e-7 V 50.794573 H 31.962814 l -0.0065,8.787406 h 2.232422"
+       id="path12"
+       sodipodi:nodetypes="cccccc" />
+    <path
+       style="fill:none;stroke:#808080;stroke-width:0.349999;stroke-miterlimit:2.3;stroke-dasharray:0.349999, 0.349999;marker-end:url(#Triangle-4-02);paint-order:fill markers stroke;stroke-opacity:1"
+       d="m 115.2484,59.519488 1.93329,10e-7 v 8.293306 l -75.968236,0.0083 0.0011,0.960016"
+       id="path12-6"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:none;stroke:#808080;stroke-width:0.349999;stroke-miterlimit:2.3;stroke-dasharray:0.349999, 0.349999;marker-end:url(#Triangle-4-02-9);paint-order:fill markers stroke;stroke-opacity:1"
+       d="m 115.24829,76.774389 1.93329,10e-7 v 10.409973 l -96.376077,-0.322429 0.0011,11.88544"
+       id="path12-6-6"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:none;stroke:#808080;stroke-width:0.349999;stroke-miterlimit:2.3;stroke-dasharray:0.349999, 0.349999;paint-order:fill markers stroke;stroke-opacity:1"
+       d="m 115.24839,59.519489 5.44391,-0.120534 0.006,27.785406 -3.51708,0"
+       id="path13"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:#808080;stroke:#808080;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle-4-0-8);paint-order:fill markers stroke"
+       d="m 95.911355,42.264589 h 4.745695"
+       id="path23-2-6-4"
+       sodipodi:nodetypes="cc" />
+  </g>
+</svg>

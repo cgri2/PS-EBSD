@@ -8,7 +8,7 @@ A Python-based EBSD reindexing pipeline for distinguishing pseudosymmetry-relate
 
 ## Overview
 
-This repository implements a multi-step EBSD reindexing workflow designed for challenging pseudosymmetry problems. The code is organized as a sequential pipeline:
+This repository implements a multi-step EBSD reindexing workflow designed for challenging pseudosymmetry materials. The code is organized as a sequential pipeline:
 
 1. **Pattern processing and initial detector setup**  
    Optimize preprocessing parameters on a representative pattern and apply the selected workflow to the full dataset.

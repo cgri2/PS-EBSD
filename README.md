@@ -3,7 +3,7 @@
 A Python-based EBSD reindexing pipeline for distinguishing pseudosymmetry-related ferroelectric domain variants using simulated pattern matching, optimized pattern preprocessing, neighbor pattern averaging, global sample-detector geometry refinement, and CI<sub>wcc</sub>-based final variant selection.
 
 <p align="center">
-  <img src="SI_Procedure.pdf" alt="Workflow schematic for the EBSD pseudosymmetry reindexing pipeline" width="950">
+  <img src="Procedure.svg" alt="Workflow schematic for the EBSD pseudosymmetry reindexing pipeline" width="950">
 </p>
 
 ## Overview

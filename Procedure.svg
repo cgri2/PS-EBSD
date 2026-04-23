@@ -26,12 +26,12 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="310.06632"
-     inkscape:cy="269.40768"
-     inkscape:window-width="1920"
-     inkscape:window-height="1010"
-     inkscape:window-x="3450"
+     inkscape:zoom="0.7071068"
+     inkscape:cx="278.60006"
+     inkscape:cy="302.64169"
+     inkscape:window-width="1152"
+     inkscape:window-height="650"
+     inkscape:window-x="-6"
      inkscape:window-y="-6"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
@@ -393,16 +393,16 @@
        transform="translate(-31.497929,-3.2255243)"><tspan
          x="94.923515"
          y="20.319149"
-         id="tspan4"><tspan
+         id="tspan10"><tspan
    style="font-style:italic;-inkscape-font-specification:'Arial, MS PGothic, SimSun Italic';fill:#000000;stroke:none"
-   id="tspan2">detector geometry and</tspan><tspan
+   id="tspan5">detector geometry and</tspan><tspan
    y="20.319149"
-   id="tspan9"> </tspan></tspan><tspan
+   id="tspan11"> </tspan></tspan><tspan
          x="94.923515"
          y="23.853781"
-         id="tspan14"><tspan
+         id="tspan66"><tspan
            style="font-style:italic;-inkscape-font-specification:'Arial, MS PGothic, SimSun Italic';fill:#000000;stroke:none"
-           id="tspan13">shape parameters</tspan></tspan></text>
+           id="tspan12">shape parameters</tspan></tspan></text>
     <text
        xml:space="preserve"
        style="font-size:2.82222px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:30.5734;display:inline;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
@@ -412,16 +412,16 @@
        transform="translate(-2.0894983,-3.2255243)"><tspan
          x="94.923515"
          y="20.319149"
-         id="tspan16"><tspan
+         id="tspan68"><tspan
    style="font-style:italic;-inkscape-font-specification:'Arial, MS PGothic, SimSun Italic';fill:#000000;stroke:none"
-   id="tspan15">initial orientations</tspan><tspan
+   id="tspan67">initial orientations</tspan><tspan
    y="20.319149"
-   id="tspan17"> </tspan></tspan><tspan
+   id="tspan69"> </tspan></tspan><tspan
          x="94.923515"
          y="23.853781"
-         id="tspan19"><tspan
+         id="tspan71"><tspan
            style="font-style:italic;-inkscape-font-specification:'Arial, MS PGothic, SimSun Italic';fill:#000000;stroke:none"
-           id="tspan18">(Hough indexing)</tspan></tspan></text>
+           id="tspan70">(Hough indexing)</tspan></tspan></text>
     <text
        xml:space="preserve"
        style="font-size:2.82222px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:30.5734;display:inline;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
@@ -431,16 +431,16 @@
        transform="translate(25.588198,-3.2255243)"><tspan
          x="94.923515"
          y="20.319149"
-         id="tspan21"><tspan
+         id="tspan73"><tspan
    style="font-style:italic;-inkscape-font-specification:'Arial, MS PGothic, SimSun Italic';fill:#000000;stroke:none"
-   id="tspan20">simulated master</tspan><tspan
+   id="tspan72">simulated master</tspan><tspan
    y="20.319149"
-   id="tspan22"> </tspan></tspan><tspan
+   id="tspan74"> </tspan></tspan><tspan
          x="94.923515"
          y="23.853781"
-         id="tspan25"><tspan
+         id="tspan76"><tspan
            style="font-style:italic;-inkscape-font-specification:'Arial, MS PGothic, SimSun Italic';fill:#000000;stroke:none"
-           id="tspan24">pattern</tspan></tspan></text>
+           id="tspan75">pattern</tspan></tspan></text>
     <g
        id="g18"
        transform="translate(-27.019587,-0.42167819)">
@@ -460,9 +460,9 @@
          transform="translate(60.287982,5.1249785)"><tspan
            x="86.328552"
            y="6.3537741"
-           id="tspan28"><tspan
+           id="tspan85"><tspan
              style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none"
-             id="tspan27">mp</tspan></tspan></text>
+             id="tspan84">mp</tspan></tspan></text>
     </g>
     <text
        xml:space="preserve"
@@ -527,16 +527,16 @@
          transform="translate(8.9133595,11.247111)"><tspan
            x="43.439922"
            y="36.020439"
-           id="tspan30"><tspan
+           id="tspan87"><tspan
    style="fill:#ffffff"
-   id="tspan29">Optimized pattern</tspan><tspan
+   id="tspan86">Optimized pattern</tspan><tspan
    y="36.020439"
-   id="tspan31"> </tspan></tspan><tspan
+   id="tspan88"> </tspan></tspan><tspan
            x="43.439922"
            y="40.430153"
-           id="tspan33"><tspan
+           id="tspan90"><tspan
              style="fill:#ffffff"
-             id="tspan32">processing</tspan></tspan></text>
+             id="tspan89">processing</tspan></tspan></text>
     </g>
     <g
        id="g19"
@@ -557,9 +557,9 @@
          transform="translate(58.026827,13.800783)"><tspan
            x="43.439922"
            y="36.020439"
-           id="tspan35"><tspan
+           id="tspan92"><tspan
              style="fill:#ffffff"
-             id="tspan34">PSS-NPA</tspan></tspan></text>
+             id="tspan91">PSS-NPA</tspan></tspan></text>
     </g>
     <g
        id="g20"
@@ -580,16 +580,16 @@
          transform="translate(104.14399,11.597649)"><tspan
            x="43.439922"
            y="36.020439"
-           id="tspan37"><tspan
+           id="tspan94"><tspan
    style="fill:#ffffff"
-   id="tspan36">DIC-based geometry</tspan><tspan
+   id="tspan93">DIC-based geometry</tspan><tspan
    y="36.020439"
-   id="tspan40"> </tspan></tspan><tspan
+   id="tspan95"> </tspan></tspan><tspan
            x="43.439922"
            y="40.430153"
-           id="tspan43"><tspan
+           id="tspan97"><tspan
              style="fill:#ffffff"
-             id="tspan41">refinement</tspan></tspan></text>
+             id="tspan96">refinement</tspan></tspan></text>
     </g>
     <g
        id="g15-8"
@@ -706,9 +706,9 @@
          transform="translate(60.287982,5.1249785)"><tspan
            x="86.328552"
            y="6.3537741"
-           id="tspan65"><tspan
+           id="tspan99"><tspan
              style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none"
-             id="tspan44">mp</tspan></tspan></text>
+             id="tspan98">mp</tspan></tspan></text>
     </g>
     <path
        style="fill:#808080;stroke:#808080;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle);paint-order:fill markers stroke"
@@ -774,34 +774,6 @@
    id="tspan26-7">2</tspan></tspan></text>
     </g>
     <g
-       id="g16-9-9-1-3"
-       transform="translate(-48.890933,69.35052)">
-      <rect
-         style="fill:#803300;stroke:none;stroke-width:0.0650188;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
-         id="rect2-5-4-0-9-5"
-         width="11.934981"
-         height="6.9349813"
-         x="84.138016"
-         y="7.4238725" />
-      <text
-         xml:space="preserve"
-         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:47.6566;display:inline;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
-         x="86.328552"
-         y="6.3537741"
-         id="text2-1-7-7-6-7"
-         transform="translate(3.7615746,5.4334435)"><tspan
-           x="86.328552"
-           y="6.3537741"
-           id="tspan69"><tspan
-             style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none"
-             id="tspan66">det</tspan><tspan
-             style="font-size:65%;baseline-shift:sub"
-             id="tspan67">1</tspan><tspan
-             style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none"
-             id="tspan68">
-</tspan></tspan></text>
-    </g>
-    <g
        id="g16-9-9-1-3-7-6"
        transform="translate(-69.298884,99.316815)">
       <rect
@@ -826,59 +798,6 @@
    id="tspan26-7-6-7">2</tspan></tspan></text>
     </g>
     <g
-       id="g16-9-9-1-3-8"
-       transform="translate(19.175397,34.840717)">
-      <rect
-         style="fill:#803300;stroke:none;stroke-width:0.0650188;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
-         id="rect2-5-4-0-9-5-8"
-         width="11.934981"
-         height="6.9349813"
-         x="84.138016"
-         y="7.4238725" />
-      <text
-         xml:space="preserve"
-         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:47.6566;display:inline;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
-         x="86.328552"
-         y="6.3537741"
-         id="text2-1-7-7-6-7-24"
-         transform="translate(3.7615746,5.4334435)"><tspan
-           x="86.328552"
-           y="6.3537741"
-           id="tspan73"><tspan
-             style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none"
-             id="tspan70">det</tspan><tspan
-             style="font-size:65%;baseline-shift:sub"
-             id="tspan71">1</tspan><tspan
-             style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none"
-             id="tspan72">
-</tspan></tspan></text>
-    </g>
-    <g
-       id="g17-2-1-4"
-       transform="translate(-90.615282,62.440516)">
-      <rect
-         style="fill:#004455;stroke:none;stroke-width:0.0650188;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
-         id="rect2-5-7-0-2-9"
-         width="11.934981"
-         height="6.9349813"
-         x="113.92738"
-         y="7.3988953" />
-      <text
-         xml:space="preserve"
-         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:47.6566;display:inline;fill:#ffffff;stroke:none;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
-         x="86.328552"
-         y="6.3537741"
-         id="text2-1-2-1-4-1"
-         transform="translate(33.552663,5.4334437)"><tspan
-           x="86.328552"
-           y="6.3537741"
-           id="tspan76"><tspan
-             style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold'"
-             id="tspan74">ori</tspan><tspan
-             style="font-size:65%;baseline-shift:sub"
-             id="tspan75">0</tspan></tspan></text>
-    </g>
-    <g
        id="g18-0-2-3"
        transform="translate(-117.37957,69.35052)">
       <rect
@@ -897,9 +816,9 @@
          transform="translate(60.287982,5.1249785)"><tspan
            x="86.328552"
            y="6.3537741"
-           id="tspan78"><tspan
+           id="tspan101"><tspan
              style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none"
-             id="tspan77">mp</tspan></tspan></text>
+             id="tspan100">mp</tspan></tspan></text>
     </g>
     <g
        id="g15-8-3-20-2-4"
@@ -958,11 +877,11 @@
        transform="translate(12.709635,92.119679)"><tspan
          x="86.328552"
          y="6.3537741"
-         id="tspan81"><tspan
+         id="tspan104"><tspan
            style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold'"
-           id="tspan79">ori</tspan><tspan
+           id="tspan102">ori</tspan><tspan
            style="font-size:65%;baseline-shift:sub"
-           id="tspan80">1</tspan></tspan></text>
+           id="tspan103">1</tspan></tspan></text>
     <g
        id="g18-0-2-3-4"
        transform="translate(-137.78753,99.316819)">
@@ -982,9 +901,9 @@
          transform="translate(60.287982,5.1249785)"><tspan
            x="86.328552"
            y="6.3537741"
-           id="tspan83"><tspan
+           id="tspan106"><tspan
              style="font-weight:bold;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none"
-             id="tspan82">mp</tspan></tspan></text>
+             id="tspan105">mp</tspan></tspan></text>
     </g>
     <path
        style="fill:#808080;stroke:#808080;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle-8-9);paint-order:fill markers stroke"
@@ -1537,6 +1456,30 @@
    style="font-size:65%;baseline-shift:sub"
    id="tspan26-7-6-2-1">0</tspan></tspan></text>
     </g>
+    <g
+       id="g17-2-1-4-6-3-9"
+       transform="translate(-90.615273,62.440516)">
+      <rect
+         style="fill:#004455;stroke:none;stroke-width:0.0650188;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-7-0-2-9-1-3-4"
+         width="11.934981"
+         height="6.9349813"
+         x="113.92738"
+         y="7.3988953" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="119.83282"
+         y="11.751259"
+         id="text2-12-7-3-8-6-2-4-2"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="119.83282"
+           y="11.751259"
+           id="tspan3-5-4-9-6-1-3-1-0">ori<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan26-7-6-2-1-8">0</tspan></tspan></text>
+    </g>
     <path
        style="fill:none;stroke:#808080;stroke-width:0.349999;stroke-miterlimit:2.3;stroke-dasharray:0.349999, 0.349999;marker-end:url(#Triangle-4);paint-order:fill markers stroke;stroke-opacity:1"
        d="m 115.2484,38.797099 1.93329,10e-7 V 50.794573 H 31.962814 l -0.0065,8.787406 h 2.232422"
@@ -1562,5 +1505,53 @@
        d="m 95.911355,42.264589 h 4.745695"
        id="path23-2-6-4"
        sodipodi:nodetypes="cc" />
+    <g
+       id="g16-9-9-1-3-7-6-8-9"
+       transform="translate(19.175398,34.840717)">
+      <rect
+         style="fill:#803300;stroke:none;stroke-width:0.0650188;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke;fill-opacity:1"
+         id="rect2-5-4-0-9-5-6-1-6-1"
+         width="11.934981"
+         height="6.9349813"
+         x="84.138016"
+         y="7.4238725" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="90.09082"
+         y="11.801213"
+         id="text2-12-7-3-8-6-5-5-7"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="90.09082"
+           y="11.801213"
+           id="tspan3-5-4-9-6-1-2-0-3">det<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan26-7-6-7-2-3">1</tspan></tspan></text>
+    </g>
+    <g
+       id="g16-9-9-1-3-7-6-8-9-6"
+       transform="translate(-48.890923,69.35052)">
+      <rect
+         style="fill:#803300;fill-opacity:1;stroke:none;stroke-width:0.0650188;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         id="rect2-5-4-0-9-5-6-1-6-1-0"
+         width="11.934981"
+         height="6.9349813"
+         x="84.138016"
+         y="7.4238725" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#666666;stroke:#666666;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:2.3;stroke-dasharray:none;stroke-dashoffset:0;paint-order:fill markers stroke"
+         x="90.09082"
+         y="11.801213"
+         id="text2-12-7-3-8-6-5-5-7-2"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52778px;font-family:Arial, 'MS PGothic', SimSun;-inkscape-font-specification:'Arial, MS PGothic, SimSun Bold';fill:#ffffff;stroke:none;stroke-width:0.2"
+           x="90.09082"
+           y="11.801213"
+           id="tspan3-5-4-9-6-1-2-0-3-8">det<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan26-7-6-7-2-3-9">1</tspan></tspan></text>
+    </g>
   </g>
 </svg>

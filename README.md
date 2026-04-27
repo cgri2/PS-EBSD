@@ -1,6 +1,10 @@
 # EBSD Pseudosymmetry Reindexing Pipeline
 
-A Python-based EBSD reindexing pipeline for distinguishing pseudosymmetry-related ferroelectric domain variants using simulated pattern matching, optimized pattern preprocessing, neighbor pattern averaging, global sample-detector geometry refinement, and CI<sub>wcc</sub>-based final variant selection.
+A Python-based EBSD reindexing pipeline for distinguishing pseudosymmetric variants using simulated pattern matching, optimized pattern preprocessing, neighbor pattern averaging, global sample-detector geometry refinement, and pseudosymmetry-sensitive confidence index for final variant selection. 
+
+Please refer to the following papers for the full methodology descriptions: 
+1. C. Griesbach, T. Scharsach, M. Trassin, D.M. Kochmann, Ferroelectric polarization mapping through pseudosymmetry-sensitive EBSD reindexing, (2026). https://doi.org/10.48550/arXiv.2601.09627.
+2. 
 
 <p align="center">
   <img src="Procedure.svg" alt="Workflow schematic for the EBSD pseudosymmetry reindexing pipeline" width="950">
@@ -11,13 +15,13 @@ A Python-based EBSD reindexing pipeline for distinguishing pseudosymmetry-relate
 This repository implements a multi-step EBSD reindexing workflow designed for challenging pseudosymmetry materials. The code is organized as a sequential pipeline:
 
 1. **Pattern processing and initial detector setup**  
-   Optimize preprocessing parameters on a representative pattern and apply the selected workflow to the full dataset.
+   Optimize image processing parameters and apply to the full pattern stack. Crop detector (if necessary).
 2. **Pseudosymmetry-sensitive neighbor pattern averaging (PSS-NPA)**  
-   Improve pattern quality before downstream reindexing by averaging locally similar neighbors.
-3. **Global geometry refinement**  
-   Refine detector/sample geometry using map-wide displacement signatures between experimental and simulated patterns.
+   Improve pattern quality before reindexing by averaging locally similar neighbors, while retaining PS variant differences.
+3. **DIC-based global geometry refinement**  
+   Refine sample-detector geometry using map-wide displacement signatures between experimental and simulated patterns.
 4. **Final pseudosymmetry-aware refinement and CI<sub>wcc</sub> selection**  
-   Refine each pseudosymmetry seed separately, compute confidence metrics, and select the best variant per pixel.
+   Refine orientations within each pseudosymmetry space separately, compute PS-senstitive confidence metrics, and select the best variant per pixel.
 
 The scripts are intended for **high-performance execution on ETH Euler / Slurm-based systems**, with MPI/Dask used in the more computationally intensive steps.
 
@@ -32,13 +36,13 @@ This step:
 - loads the raw EBSD patterns from `MAPNAME.h5`
 - loads the initial Hough / orientation map from `MAPNAME.ang`
 - constructs an initial detector from vendor pattern center values passed through environment variables
-- crops the detector and patterns to a square signal region
+- crops the detector and patterns to a square signal region (important for pattern processing and geometry refinement)
 - extrapolates the detector PC field over the full map
 - performs a small orientation + projection-center refinement on a subset of the map with pseudosymmetry operators enabled
 - optimizes a preprocessing pipeline using Bayesian optimization (`gp_minimize`)
 - applies the selected preprocessing to the entire dataset
 
-### Pattern-processing stages
+#### Pattern-processing stages
 
 The optimized preprocessing pipeline includes:
 
@@ -46,7 +50,9 @@ The optimized preprocessing pipeline includes:
 - optional adaptive histogram equalization
 - FFT-based bandpass filtering
 
-### Part 1A outputs
+Other image processing steps can be easily added or swapped in. 
+
+#### Part 1A outputs
 
 - `MAPNAME_Detector.txt` — initial extrapolated detector field  
 - `MAPNAME_ProcessingParameters.txt` — selected preprocessing parameters and summary metrics  
@@ -57,11 +63,11 @@ The optimized preprocessing pipeline includes:
 
 ### Part 1B — Pseudosymmetry-sensitive neighbor pattern averaging (`ReindexingPS_Part1B_NPA_MPI.py`)
 
-This stage performs non-local neighbor pattern averaging using MPI/Dask. It pads the pattern stack in navigation space, distributes the work across workers, computes normalized cross-correlation between each pattern and its local neighborhood, and uses a **first-jump cutoff** strategy to identify a suitable neighbor set for averaging.
+This stage performs non-local neighbor pattern averaging using MPI/Dask. It pads the pattern stack in navigation space, distributes the work across workers, computes the normalized cross-correlation between each pattern and its local neighborhood, and uses a **first-jump cutoff** strategy to identify a suitable neighbor set for averaging.
 
-The goal is to improve pattern quality while avoiding averaging across dissimilar neighborhoods.
+The goal is to improve pattern quality while avoiding averaging across dissimilar (PS-variant) neighborhoods.
 
-### Part 1B outputs
+#### Part 1B outputs
 
 This stage writes the averaged patterns to a new HDF5 dataset used by later stages:
 
@@ -83,7 +89,7 @@ The geometry refinement is handled by `optimize_geometry_and_orientations()` in 
 - orientation refinement under the updated geometry
 - acceptance/rejection of each update based on post-refinement NCC improvement
 
-### Part 1C outputs
+#### Part 1C outputs
 
 - `MAPNAME_CalibratedDetector.txt` — refined detector field extrapolated back to the full map  
 - `MAPNAME_GeomRefine/` — geometry-refinement diagnostics and iteration outputs  
@@ -91,21 +97,21 @@ The geometry refinement is handled by `optimize_geometry_and_orientations()` in 
 
 ---
 
-### Part 2 — Final pseudosymmetry-aware refinement and confidence scoring (`ReindexingPS_Part2_NCCrefPScheck.py`)
+### Part 2 — Final pseudosymmetry-sensitive refinement and confidence scoring (`ReindexingPS_Part2_NCCrefPScheck.py`)
 
 This is the final reindexing stage.
 
 The script:
 
 - loads the NPA-processed patterns and calibrated detector
-- constructs six pseudosymmetry-related seeds from the original Hough map
-- refines each seed **without allowing switching during the refinement pass**
+- constructs N PS orientation seeds from the original Hough map 
+- refines orientations within each PS variant space
 - computes CI<sub>wcc</sub>-related metrics for each variant using `compute_wcc_map()`
 - stores per-variant metrics in HDF5
-- selects the best variant per pixel based on the scalar confidence metric
+- selects the best variant per pixel based on the scalar PS-sensitive confidence metric
 - reconstructs the final selected crystal map and writes it to `.ang`
 
-### Part 2 outputs
+#### Part 2 outputs
 
 Inside:
 
@@ -115,7 +121,7 @@ The main outputs are:
 
 - `MAPNAME_Refine1step_V0.ang` … `MAPNAME_Refine1step_V5.ang` — refined maps for each pseudosymmetry seed  
 - `MAPNAME_CIwcc_data.h5` — per-variant and final confidence datasets  
-- `MAPNAME_FinalSelected.ang` — final selected map after variant competition
+- `MAPNAME_FinalSelected.ang` — final selected map after PS variant selection
 
 The final HDF5 file contains datasets such as:
 
@@ -134,17 +140,23 @@ The final HDF5 file contains datasets such as:
 
 ```text
 .
+├── README.md
 ├── EBSD_extra_functions.py
+├── EBSD_extra_functions_numba.py
 ├── EBSD_refine_geometry.py
 ├── ReindexingPS_Part1A_PatternProcessing.py
 ├── ReindexingPS_Part1B_NPA_MPI.py
 ├── ReindexingPS_Part1C_GlobalGeomRefine.py
 ├── ReindexingPS_Part2_NCCrefPScheck.py
-├── run_Part1A.sh
-├── run_Part1B_MPI.sh
-├── run_Part1C.sh
-├── run_Part2_MPI.sh
-└── submit_pipeline.sh
+├── requirements.txt
+├── cluster_run/
+├── ├──  run_Part1A.sh
+├── ├── run_Part1B_MPI.sh
+├── ├── run_Part1C.sh
+├── ├── run_Part2_MPI.sh
+├── ├── submit_pipeline.sh
+├── examples/
+└──
 ```
 
 ### Helper modules
@@ -159,6 +171,9 @@ Contains utility functions used across the pipeline, including for example:
 - CI<sub>wcc</sub> calculations (`compute_wcc_map`)
 - diagnostic GIF generation (`make_flash_gif`)
 
+#### `EBSD_extra_functions_numba.py`
+Contains utility functions using only numba for fast computations. 
+
 #### `EBSD_refine_geometry.py`
 Contains the geometry-refinement implementation, including:
 
@@ -170,24 +185,26 @@ Contains the geometry-refinement implementation, including:
 
 ---
 
-## Input data assumptions
+## Input data
 
-The pipeline assumes the following input files are already available:
+The following inputs are necessary:
 
 - `MAPNAME.h5` — raw EBSD patterns
 - `MAPNAME.ang` — initial orientation map
 - `MP_PATH` — path to an EBSD master pattern HDF5 file with:
   - `Data/Master/Dynamical/Lower`
   - `Data/Master/Dynamical/Upper`
-
-It also expects initial detector parameters to be passed through environment variables or command-line submission arguments:
-
-- `PCX`
-- `PCY`
-- `PCZ`
-- `SAMPLE_TILT_DEG`
+- Initial detector parameters
+  - `PCX`
+  - `PCY`
+  - `PCZ`
+  - `SAMPLE_TILT`
+  - `DETECTOR_TILT`
+  - `AZIMUTHAL`
 - `ENERGY_KV`
 - `RADIUS`
+
+Additionally, it is necessary to define the pseudosymmetry operations for your material, ideally from a set of axes and angles. All script which use `PS_rotations` should be edited to include your material-specific PS operations.
 
 ---
 

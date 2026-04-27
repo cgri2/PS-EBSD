@@ -150,7 +150,7 @@ The final HDF5 file contains datasets such as:
 ├── ReindexingPS_Part2_NCCrefPScheck.py
 ├── requirements.txt
 ├── cluster_run/
-├── ├──  run_Part1A.sh
+├── ├── run_Part1A.sh
 ├── ├── run_Part1B_MPI.sh
 ├── ├── run_Part1C.sh
 ├── ├── run_Part2_MPI.sh
@@ -208,7 +208,63 @@ Additionally, it is necessary to define the pseudosymmetry operations for your m
 
 ---
 
-## Running the pipeline
+## Dependencies
+
+### Core Python dependencies
+- `numpy`
+- `matplotlib`
+- `h5py`
+- `kikuchipy`
+- `orix`
+- `hyperspy`
+- `scikit-optimize`
+- `scikit-image`
+- `opencv-python`
+- `scipy`
+- `dask`
+- `distributed`
+- `dask-mpi`
+- `imageio`
+- `pandas`
+- `pyvista`
+- `tqdm`
+
+### HPC dependencies
+Needed for MPI-parallel steps:
+- `dask-mpi`
+- MPI implementation such as OpenMPI
+
+Additional notes:
+- the specific versions used are listed in `requirements.txt`
+- the Slurm scripts target the ETH Euler software stack `stack/2024-06` with Python `3.12.8`
+- MPI-enabled stages load `openmpi/4.1.6`
+
+---
+## Example installation
+
+This code was developed and tested with Python 3.12.8.
+
+### 1. Clone the repository
+```
+git clone <your-repo-url>
+cd <your-repo-name>
+```
+
+### 2. Create a virtual environment
+```
+python3.12 -m venv venv
+source venv/bin/activate
+```
+
+### 3. Install required packages
+```
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+---
+
+## Automatic submission of the full pipeline using slurm
 
 ### Submit the full pipeline
 
@@ -270,39 +326,7 @@ Current resource requests in the uploaded versions are:
 
 These settings are useful starting points, but they will likely need adjustment for different map sizes and cluster environments.
 
----
 
-## Dependencies
-
-The codebase appears to rely on the following Python packages:
-
-- `numpy`
-- `matplotlib`
-- `h5py`
-- `kikuchipy`
-- `orix`
-- `hyperspy`
-- `scikit-optimize`
-- `scikit-image`
-- `opencv-python`
-- `scipy`
-- `dask`
-- `distributed`
-- `dask-mpi`
-- `imageio`
-- `pandas`
-- `pyvista`
-- `tqdm`
-
-Additional notes:
-
-- the code imports a local compiled helper module named `EBSD_extra_functions_numba`
-- the Slurm scripts target the ETH Euler software stack `stack/2024-06` with Python `3.12.8`
-- MPI-enabled stages load `openmpi/4.1.6`
-
-Because no environment file was included in the uploaded material, this dependency list should be treated as a **best-effort reconstruction** from the scripts rather than a locked environment specification.
-
----
 
 ## Notes for a public repository
 

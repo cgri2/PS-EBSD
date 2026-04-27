@@ -20,7 +20,7 @@ This repository implements a multi-step EBSD reindexing workflow designed for ch
    Improve pattern quality before reindexing by averaging locally similar neighbors, while retaining PS variant differences.
 3. **DIC-based global geometry refinement**  
    Refine sample-detector geometry using map-wide displacement signatures between experimental and simulated patterns.
-4. **Final pseudosymmetry-aware refinement and CI<sub>wcc</sub> selection**  
+4. **Final pseudosymmetry-sensitive refinement through maximum CI<sub>PS</sub> selection**  
    Refine orientations within each pseudosymmetry space separately, compute PS-senstitive confidence metrics, and select the best variant per pixel.
 
 The scripts are intended for **high-performance execution on ETH Euler / Slurm-based systems**, with MPI/Dask used in the more computationally intensive steps.

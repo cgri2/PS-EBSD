@@ -246,14 +246,14 @@ This code was developed and tested with Python 3.12.8.
 
 ### 1. Clone the repository
 ```
-git clone <your-repo-url>
-cd <your-repo-name>
+git clone <https://github.com/cgri2/PS-EBSD>
+cd <PS-EBSD>
 ```
 
 ### 2. Create a virtual environment
 ```
-python3.12 -m venv venv
-source venv/bin/activate
+python3.12 -m venv psebsd_env
+source psebsd_env/bin/activate
 ```
 
 ### 3. Install required packages
@@ -326,27 +326,3 @@ Current resource requests in the uploaded versions are:
 
 These settings are useful starting points, but they will likely need adjustment for different map sizes and cluster environments.
 
-
-
-## Notes for a public repository
-
-Before making the repository public, you may want to:
-
-- replace hard-coded cluster paths such as `/cluster/work/...` and `/cluster/project/...`
-- include an `environment.yml` or `requirements.txt`
-- add a small example dataset or a synthetic demo
-- document the meaning of CI<sub>wcc</sub>, `Xi_e`, `Xi_t`, and `Xi_eN` in more detail
-- add a license
-- add a citation section if this accompanies a manuscript or preprint
-
----
-
-## Suggested citation text
-
-If you plan to attach this repository to a manuscript, a short citation block could be added here later, for example with the paper title, DOI, and versioned GitHub release / Zenodo archive.
-
----
-
-## Contact
-
-For questions about the method or implementation, please open an issue or contact the repository maintainer.

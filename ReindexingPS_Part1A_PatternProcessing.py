@@ -10,13 +10,11 @@ from skopt import gp_minimize
 from skopt.space import Real, Integer, Categorical
 from skopt.utils import use_named_args
 import time
-import sys
-sys.path.append("/cluster/work/mandm/cgriesbach/EBSDindexing")
 import EBSD_extra_functions as xfn
 start_time = time.time()
 
 # ------ File paths -------------------------------------------------
-#read common environment variables
+#read common environment variables from input file or define directly here 
 pname = os.environ["PNAME"]
 mapname = os.environ["MAPNAME"]
 mp_path = os.environ.get("MP_PATH","")
@@ -25,7 +23,7 @@ pcx = float(os.environ["PCX"])
 pcy = float(os.environ["PCY"])
 pcz = float(os.environ["PCZ"])
 sample_tilt_deg = float(os.environ["SAMPLE_TILT_DEG"])
-
+# ** review other variables and inputs in script and change as needed **
 
 # ------ Load data and crop -----------------------------------------
 xpat = kp.load(os.path.join(pname,f"{mapname}.h5"),lazy=True)
@@ -44,17 +42,6 @@ xpat.crop_signal(top=x0, bottom=x1, left=x0, right=x1)
 _, _, py_c, px_c = xpat.data.shape
 
 #Define detector
-"""
-#load from Si cal data
-det_cal=kp.detectors.EBSDDetector.load(os.path.join(pname,"20250821_BTO101PFM_SiCal1_DetCal_crop.txt"))
-SiCal_map = plugins.ang.file_reader(os.path.join(pname,"20250821_BTO101PFM_SiCal1_refined_crop.ang"))
-#extrapolate calibrated detector pattern centers to new dataset
-det_xmap = det_cal.extrapolate_pc(
-    pc_indices=[SiCal_map.x,SiCal_map.y],
-    navigation_shape=xmap.shape,
-    step_sizes=(xmap.dx, xmap.dy),
-)
-"""
 #pc from vendor
 det = kp.detectors.EBSDDetector(
         shape=(py,px),

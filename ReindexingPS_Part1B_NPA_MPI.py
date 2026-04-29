@@ -8,6 +8,7 @@ import hyperspy.api as hs
 import kikuchipy as kp
 import h5py
 import dask.array as da
+from pathlib import Path
 from tqdm import tqdm
 from dask.distributed import Client, progress, wait
 from dask_mpi import initialize
@@ -15,12 +16,15 @@ import time
 start_time=time.time()
 
 #Filepaths
+#read common environment variables from input file or define directly here
 pname = os.environ["PNAME"]
 mapname = os.environ["MAPNAME"]
 r=int(os.environ["RADIUS"]) #radius for NPA
 bl=20 #lower bound of search window
 bu=20 #upper bound of search window
 sig_z=5 #num std dev
+
+# ** review other variables and inputs in script and change as needed **
 
 # ─── 1) Start your Dask‐MPI cluster ────────────────────────────────────────────
 num_workers = int(os.environ.get("SLURM_NTASKS", os.cpu_count())) - 2 #reads ntasks from job script and reserves 2 tasks for other roles
@@ -31,7 +35,9 @@ mem = (
     else "auto"
     )
 #Lanch the dask cluster
-initialize(nthreads=1, memory_limit=mem, local_directory="/cluster/work/mandm/cgriesbach/EBSDindexing/dask-temp/dask-mpi-workers")
+dask_tmp = Path(pname) / "dask-temp" / "dask-mpi-workers"
+dask_tmp.mkdir(parents=True, exist_ok=True)
+initialize(nthreads=1, memory_limit=mem, local_directory=str(dask_tmp))
 client = Client()
 
 # ─── 2) Load & chunk patterns ─────────────────────────────────────────────────

@@ -12,18 +12,17 @@ from orix import sampling, plot, io
 from orix.vector import Vector3d
 import hyperspy.api as hs  
 import kikuchipy as kp
-import sys
-sys.path.append("/cluster/work/mandm/cgriesbach/EBSDindexing")
 import EBSD_extra_functions as xfn
 from EBSD_refine_geometry import optimize_geometry_and_orientations
 
 # -------------------- Set filepaths ---------------------------------------------------------------
+# Read common environment variables from input file or define directly here 
 pname = os.environ["PNAME"]
 mapname = os.environ["MAPNAME"]
 mp_path = os.environ.get("MP_PATH", "")
 energy_kV = float(os.environ.get("ENERGY_KV", "25"))
 r = int(os.environ["RADIUS"])
-
+# ** review other variables and inputs in script and change as needed ** 
 # -------------------- Load data -------------------------------------------------------------------
 # Load patterns
 xpat = kp.load(os.path.join(pname, f'{mapname}_PP_NPA{r}.h5'), lazy=True)

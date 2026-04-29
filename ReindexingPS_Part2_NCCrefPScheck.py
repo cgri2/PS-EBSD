@@ -5,6 +5,7 @@ from orix.io import plugins
 from orix.quaternion import Rotation
 from orix.crystal_map import CrystalMap
 from orix import io
+from pathlib import Path
 import hyperspy.api as hs
 import kikuchipy as kp
 import h5py
@@ -12,12 +13,12 @@ from dask.distributed import Client, wait, performance_report
 from dask_mpi import initialize
 from collections import Counter
 import time
-import sys
-sys.path.append("/cluster/work/mandm/cgriesbach/EBSDindexing")
 import EBSD_extra_functions as xfn
 start = time.time()
 
 # -------------------------- Initialize: filepaths and start dask jobs ---------------------------------------
+#read common environment variables from input file or define directly here 
+# ** review other variables and inputs in script and change as needed **
 pname = os.environ["PNAME"]
 mapname = os.environ["MAPNAME"]
 mp_path = os.environ.get("MP_PATH", "")
@@ -32,7 +33,9 @@ os.makedirs("logs", exist_ok=True)
 num_workers = int(os.environ.get("SLURM_NTASKS", os.cpu_count())) - 2
 mem = (1024 * 1024 * int(os.environ["SLURM_MEM_PER_CPU"])
        if os.environ.get("SLURM_MEM_PER_CPU") else "auto")
-initialize(nthreads=1, memory_limit=mem, local_directory="/cluster/work/mandm/cgriesbach/EBSDindexing/dask-temp/dask-mpi-workers")
+dask_tmp = Path(pname) / "dask-temp" / "dask-mpi-workers"
+dask_tmp.mkdir(parents=True, exist_ok=True)
+initialize(nthreads=1, memory_limit=mem, local_directory=str(dask_tmp))
 client = Client()
 print("dashboard:", client.dashboard_link)
 print("Scheduler address:", client.scheduler.address)

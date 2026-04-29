@@ -225,8 +225,8 @@ This code was developed and tested with Python 3.12.8.
 
 ### 1. Clone the repository
 ```
-git clone <https://github.com/cgri2/PS-EBSD>
-cd <PS-EBSD>
+git clone https://github.com/cgri2/PS-EBSD
+cd PS-EBSD
 ```
 
 ### 2. Create a virtual environment

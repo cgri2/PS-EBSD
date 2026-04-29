@@ -12,8 +12,6 @@ from scipy.linalg import lstsq
 import os
 from matplotlib import cm
 import time
-import sys
-sys.path.append("/cluster/project/mandm/EBSDindexing")
 from EBSD_extra_functions import make_flash_gif
 
 # ---------- Utilities ---------------------------------------------------

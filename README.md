@@ -136,29 +136,6 @@ The final HDF5 file contains datasets such as:
 
 ---
 
-## Repository structure
-
-```text
-.
-├── README.md
-├── EBSD_extra_functions.py
-├── EBSD_extra_functions_numba.py
-├── EBSD_refine_geometry.py
-├── ReindexingPS_Part1A_PatternProcessing.py
-├── ReindexingPS_Part1B_NPA_MPI.py
-├── ReindexingPS_Part1C_GlobalGeomRefine.py
-├── ReindexingPS_Part2_NCCrefPScheck.py
-├── requirements.txt
-├── cluster_run/
-├── ├── run_Part1A.sh
-├── ├── run_Part1B_MPI.sh
-├── ├── run_Part1C.sh
-├── ├── run_Part2_MPI.sh
-├── ├── submit_pipeline.sh
-├── examples/
-└──
-```
-
 ### Helper modules
 
 #### `EBSD_extra_functions.py`
@@ -204,7 +181,9 @@ The following inputs are necessary:
 - `ENERGY_KV`
 - `RADIUS`
 
-Additionally, it is necessary to define the pseudosymmetry operations for your material, ideally from a set of axes and angles. All script which use `PS_rotations` should be edited to include your material-specific PS operations.
+Additionally, it is necessary to define the pseudosymmetry operations for your material, ideally from a set of axes and angles. All scripts that use `PS_rotations` should be edited to include your material-specific PS operations.
+
+There are many other parameters and function options in the scripts that may need to be changed.
 
 ---
 

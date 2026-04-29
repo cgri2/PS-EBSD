@@ -4,7 +4,7 @@ A Python-based EBSD reindexing pipeline for distinguishing pseudosymmetric varia
 
 Please refer to the following papers for the full methodology descriptions: 
 1. C. Griesbach, T. Scharsach, M. Trassin, D.M. Kochmann, Ferroelectric polarization mapping through pseudosymmetry-sensitive EBSD reindexing, (2026). https://doi.org/10.48550/arXiv.2601.09627.
-2. 
+2. C. Griesbach, D.M. Kochmann, Global DIC-based sample-detector geometry refinement for accurate EBSD indexing, (2026). https://doi.org/10.48550/arXiv.2604.25869.
 
 <p align="center">
   <img src="Procedure.svg" alt="Workflow schematic for the EBSD pseudosymmetry reindexing pipeline" width="950">

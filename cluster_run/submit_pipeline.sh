@@ -3,10 +3,10 @@ set -euo pipefail
 
 # Usage:
 #   ./submit_pipeline.sh \
-#     --pname /cluster/work/.../20250828_BTOpoly_S1/ \
-#     --mapname 20250828_BTO_S1_A1 \
-#     --mp_path /cluster/work/.../MasterPatterns/BTOsc_25kV.sdf5 \
-#     --energy 25
+#     --pname PATH_TO_DATA \
+#     --mapname MAPNAME \
+#     --mp_path PATH_TO_MASTER_PATTERN \
+#     --energy BEAM_ENERGY
 
 # ---- Default inputs ----
 START_FROM="1A" #default (change if code series partially ran to skip completed steps); allowed: 1A, 1B, 1C, 2
@@ -20,7 +20,6 @@ PCY=""
 PCZ=""
 SAMPLE_TILT_DEG="70"
 RADIUS="7"	#radius for PSS-NPA
-
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -48,30 +47,43 @@ if [[ -z "${PNAME}" || -z "${MAPNAME}" || -z "${MP_PATH}" ]]; then
   exit 2
 fi
 
-PIPE_ROOT="/cluster/work/mandm/cgriesbach/EBSDindexing/ReindexingPipeline"
-SBATCH_DIR="${PIPE_ROOT}/sbatch"
+PIPE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SBATCH_DIR="${PIPE_ROOT}/cluster_run"
 
 # Common exports passed to every job:
 EXPORTS="ALL,PNAME=${PNAME},MAPNAME=${MAPNAME},MP_PATH=${MP_PATH},ENERGY_KV=${ENERGY},\
 PCX=${PCX},PCY=${PCY},PCZ=${PCZ},SAMPLE_TILT_DEG=${SAMPLE_TILT_DEG},RADIUS=${RADIUS},\
 PIPE_ROOT=${PIPE_ROOT}"
 
-
-mkdir -p logs
+LOG_DIR="${PNAME}/logs"
+mkdir -p "${LOG_DIR}"
 
 dep=""  # dependency string for the next job (e.g. afterok:12345)
 
 if [[ "$START_FROM" == "1A" ]]; then
-  jid1=$(sbatch --parsable --export="${EXPORTS}" "${SBATCH_DIR}/run_Part1A.sh")
+  jid1=$(sbatch --parsable \
+    --output="${LOG_DIR}/Part1A_%j.out" \
+    --error="${LOG_DIR}/Part1A_%j.err" \
+    --export="${EXPORTS}" \
+    "${SBATCH_DIR}/run_Part1A.sh")
   echo "Submitted Part1A as ${jid1}"
   dep="afterok:${jid1}"
 fi
 
 if [[ "$START_FROM" == "1A" || "$START_FROM" == "1B" ]]; then
   if [[ -n "$dep" ]]; then
-    jid2=$(sbatch --parsable --dependency="$dep" --export="${EXPORTS}" "${SBATCH_DIR}/run_Part1B_MPI.sh")
+    jid2=$(sbatch --parsable \
+      --dependency="$dep" \
+      --output="${LOG_DIR}/Part1B_%j.out" \
+      --error="${LOG_DIR}/Part1B_%j.err" \
+      --export="${EXPORTS}" \
+      "${SBATCH_DIR}/run_Part1B_MPI.sh")
   else
-    jid2=$(sbatch --parsable --export="${EXPORTS}" "${SBATCH_DIR}/run_Part1B_MPI.sh")
+    jid2=$(sbatch --parsable \
+      --output="${LOG_DIR}/Part1B_%j.out" \
+      --error="${LOG_DIR}/Part1B_%j.err" \
+      --export="${EXPORTS}" \
+      "${SBATCH_DIR}/run_Part1B_MPI.sh")
   fi
   echo "Submitted Part1B as ${jid2}${dep:+ (depends on $dep)}"
   dep="afterok:${jid2}"
@@ -79,9 +91,18 @@ fi
 
 if [[ "$START_FROM" == "1A" || "$START_FROM" == "1B" || "$START_FROM" == "1C" ]]; then
   if [[ -n "$dep" ]]; then
-    jid3=$(sbatch --parsable --dependency="$dep" --export="${EXPORTS}" "${SBATCH_DIR}/run_Part1C.sh")
+    jid3=$(sbatch --parsable \
+      --dependency="$dep" \
+      --output="${LOG_DIR}/Part1C_%j.out" \
+      --error="${LOG_DIR}/Part1C_%j.err" \
+      --export="${EXPORTS}" \
+      "${SBATCH_DIR}/run_Part1C.sh")
   else
-    jid3=$(sbatch --parsable --export="${EXPORTS}" "${SBATCH_DIR}/run_Part1C.sh")
+    jid3=$(sbatch --parsable \
+      --output="${LOG_DIR}/Part1C_%j.out" \
+      --error="${LOG_DIR}/Part1C_%j.err" \
+      --export="${EXPORTS}" \
+      "${SBATCH_DIR}/run_Part1C.sh")
   fi
   echo "Submitted Part1C as ${jid3}${dep:+ (depends on $dep)}"
   dep="afterok:${jid3}"
@@ -89,14 +110,21 @@ fi
 
 # Part 2 always runs unless you want an option to stop at 1C
 if [[ -n "$dep" ]]; then
-  jid4=$(sbatch --parsable --dependency="$dep" --export="${EXPORTS}" "${SBATCH_DIR}/run_Part2_MPI.sh")
+  jid4=$(sbatch --parsable \
+    --dependency="$dep" \
+    --output="${LOG_DIR}/Part2_%j.out" \
+    --error="${LOG_DIR}/Part2_%j.err" \
+    --export="${EXPORTS}" \
+    "${SBATCH_DIR}/run_Part2_MPI.sh")
 else
-  jid4=$(sbatch --parsable --export="${EXPORTS}" "${SBATCH_DIR}/run_Part2_MPI.sh")
+  jid4=$(sbatch --parsable \
+    --output="${LOG_DIR}/Part2_%j.out" \
+    --error="${LOG_DIR}/Part2_%j.err" \
+    --export="${EXPORTS}" \
+    "${SBATCH_DIR}/run_Part2_MPI.sh")
 fi
 echo "Submitted Part2 as ${jid4}${dep:+ (depends on $dep)}"
 
-
-echo
 echo "Pipeline submitted:"
 echo "  1A: ${jid1}"
 echo "  1B: ${jid2}"

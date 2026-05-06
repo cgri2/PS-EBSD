@@ -2,15 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import shutil
-from orix import io
-from orix.io import plugins
-import hyperspy.api as hs  
 import kikuchipy as kp
 import h5py
 import dask.array as da
 from pathlib import Path
 from tqdm import tqdm
-from dask.distributed import Client, progress, wait
+from dask.distributed import Client, wait
 from dask_mpi import initialize
 import time
 start_time=time.time()

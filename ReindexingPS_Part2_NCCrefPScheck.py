@@ -1,6 +1,5 @@
 import numpy as np
 import os
-import argparse
 from orix.io import plugins
 from orix.quaternion import Rotation
 from orix.crystal_map import CrystalMap
@@ -9,7 +8,7 @@ from pathlib import Path
 import hyperspy.api as hs
 import kikuchipy as kp
 import h5py
-from dask.distributed import Client, wait, performance_report
+from dask.distributed import Client, wait
 from dask_mpi import initialize
 from collections import Counter
 import time

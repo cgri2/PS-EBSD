@@ -1,15 +1,8 @@
-import matplotlib.pyplot as plt
-import numpy as np
-import pyvista as pv
-import pandas as pd
 import h5py
 import os
 import shutil
 from orix.io import plugins
-from orix.crystal_map import Phase, CrystalMap
 from orix.quaternion import Rotation
-from orix import sampling, plot, io
-from orix.vector import Vector3d
 import hyperspy.api as hs  
 import kikuchipy as kp
 import EBSD_extra_functions as xfn

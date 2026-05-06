@@ -4,7 +4,6 @@ import numpy as np
 import cv2
 from skimage.transform import downscale_local_mean
 from skimage.registration import phase_cross_correlation
-import imageio.v2 as imageio
 import matplotlib.pyplot as plt
 from dataclasses import dataclass
 from typing import Dict, Optional, Sequence, Tuple, Any, List

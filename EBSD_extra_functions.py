@@ -437,9 +437,6 @@ def save_metrics_h5(
     return out_h5_path
 
 # ======================= CI_wcc caluclations ================================
-import numpy as np
-from kikuchipy.signals.util._master_pattern import _project_single_pattern_from_master_pattern
-
 DTYPE = np.float64
 SUM_DTYPE = np.float64
 
@@ -560,10 +557,6 @@ def compute_wcc_map(
     signal_mask=None,           # boolean mask for detector (False = include point)
     stripe_x=4, stripe_y=2  # compute in small tiles to save RAM
 ):
-    import numpy as np
-    from kikuchipy.signals.util._master_pattern import _get_direction_cosines_for_varying_pc
-    from kikuchipy.indexing._refinement._refinement import _get_master_pattern_data
-
     # Get master pattern data
     m_u, m_l, npx, npy, scale = _get_master_pattern_data(master_pattern, energy_kV)
 
@@ -634,8 +627,7 @@ def compute_wcc_map(
             pc_z_tile = pcz[idx1D_tile]
 
             # Compute direction cosines for this tile's PC values
-            # _get_direction_cosines_for_varying_pc expects a 1D boolean signal mask where True==include
-            dir_cos_tile = _get_direction_cosines_for_varying_pc(
+            dir_cos_tile = xfn_nb.get_direction_cosines_for_varying_pc_local(
                 pcx=pc_x_tile,
                 pcy=pc_y_tile,
                 pcz=pc_z_tile,

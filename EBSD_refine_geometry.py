@@ -1,4 +1,3 @@
-# ebsd_all_in_one.py
 from __future__ import annotations
 import numpy as np
 import cv2
@@ -562,7 +561,7 @@ def apply_det_update(
     if not update_pc:
         return det
 
-    tilt_keys = {"sample_tilt", "azimuthal", "tilt"}
+    tilt_keys = {"sample_tilt", "azimuthal", "tilt", "twist"}
     if xmap is None or not any(k in tilt_keys for k in keys):
         return det
 

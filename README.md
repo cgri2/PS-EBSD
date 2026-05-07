@@ -204,9 +204,8 @@ There are many other parameters and function options in the scripts that may nee
 - `distributed`
 - `dask-mpi`
 - `imageio`
-- `pandas`
-- `pyvista`
 - `tqdm`
+- `numba`
 
 ### HPC dependencies
 Needed for MPI-parallel steps:
@@ -215,8 +214,7 @@ Needed for MPI-parallel steps:
 
 Additional notes:
 - the specific versions used are listed in `requirements.txt`
-- the Slurm scripts target the ETH Euler software stack `stack/2024-06` with Python `3.12.8`
-- MPI-enabled stages load `openmpi/4.1.6`
+- The ETH Euler-specific module load stack/2024-06 python/3.12.8 and module load openmpi/4.1.6 lines in the Slurm scripts are examples for the Euler environment only. On other systems, users should install an equivalent Python 3.12 environment and an MPI implementation if running Parts 1B or 2.
 
 ---
 ## Example installation

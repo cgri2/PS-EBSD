@@ -67,6 +67,8 @@ print(det_best)
 print('dtheta:')
 print('sample tilt:', det_best.sample_tilt - detS.sample_tilt)
 print('azimuthal:', det_best.azimuthal - detS.azimuthal)
+print('tilt:', det_best.tilt - detS.tilt)
+print('twist:', det_best.twist - detS.twist)
 print('pcx:', det_best.pc_average[0] - detS.pc_average[0], 'pcy:', det_best.pc_average[1] - detS.pc_average[1], 'pcz:', det_best.pc_average[2] - detS.pc_average[2])
 
 #Create new detector

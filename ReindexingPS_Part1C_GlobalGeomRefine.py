@@ -46,8 +46,8 @@ det_best, xmap_best, log = optimize_geometry_and_orientations(
     det0=detS,                 # initial detector
     master_pattern=mp,       # same one you already use
     energy=energy_kV,
-    keys=['pcx','pcy','pcz','sample_tilt','azimuthal','tilt'],
-    steps=[0.01, 0.01, 0.02, 1.0, 0.1, 0.1],
+    keys=['pcx','pcy','pcz','sample_tilt','azimuthal','tilt', 'twist'],
+    steps=[0.01, 0.01, 0.02, 1.0, 0.1, 0.1, 0.1],
     binning=4,
     nrows=8, ncols=8,
     out_idx=(1, 1),            # (j,i) in nav grid for plots/GIFs

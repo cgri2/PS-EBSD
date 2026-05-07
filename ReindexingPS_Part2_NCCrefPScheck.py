@@ -49,7 +49,7 @@ xpat.set_scan_calibration(step_x=xmap.dx, step_y=xmap.dy)
 # Circular signal mask
 #signal_mask = xfn.make_circular_signal_mask(py, px)
 # Load master pattern
-mp = load_oxford_mp(mp_path)
+mp = xfn.load_oxford_mp(mp_path)
 mp.phase = xmap.phases[0]
 # Load calibrated detector
 det_xmap = kp.detectors.EBSDDetector.load(os.path.join(pname, f"{mapname}_CalibratedDetector.txt"))

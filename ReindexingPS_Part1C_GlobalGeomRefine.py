@@ -26,7 +26,7 @@ xmap = plugins.ang.file_reader(os.path.join(pname, f'{mapname}.ang'))
 det = kp.detectors.EBSDDetector.load(os.path.join(pname, f'{mapname}_Detector.txt'))
 print('Initial detector:', det, 'Std_pc:', det.pcx.std(), det.pcy.std(), det.pcz.std())
 # Load the master pattern
-mp = load_oxford_mp(mp_path)
+mp = xfn.load_oxford_mp(mp_path)
 mp.phase = xmap.phases[0]
 # Select subset of data for geometry refinement
 xpatS, detS, xmapS, pc_indices = xfn.EBSD_subset(xpat, det, xmap, n_points=100)

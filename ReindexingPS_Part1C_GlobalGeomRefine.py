@@ -26,16 +26,8 @@ xmap = plugins.ang.file_reader(os.path.join(pname, f'{mapname}.ang'))
 det = kp.detectors.EBSDDetector.load(os.path.join(pname, f'{mapname}_Detector.txt'))
 print('Initial detector:', det, 'Std_pc:', det.pcx.std(), det.pcy.std(), det.pcz.std())
 # Load the master pattern
-with h5py.File(mp_path,'r') as f:
-    lower_hemisphere = f["Data/Master/Dynamical/Lower"][()]
-    upper_hemisphere = f["Data/Master/Dynamical/Upper"][()]
-south_signal = hs.signals.Signal2D(lower_hemisphere)
-north_signal = hs.signals.Signal2D(upper_hemisphere)
-mp = kp.signals.EBSDMasterPattern([north_signal, south_signal], hemisphere='both',) # Create the EBSDMasterPattern signal, explicitly setting hemispheres
-mp.hemispheres = {"north", "south"} # Assign hemispheres
-mp.projection = 'stereographic' #Assign projection
-mp_l = mp.as_lambert() # Convert the master pattern to the square Lambert projection
-mp_l.phase = xmap.phases[0]
+mp = load_oxford_mp(mp_path)
+mp.phase = xmap.phases[0]
 # Select subset of data for geometry refinement
 xpatS, detS, xmapS, pc_indices = xfn.EBSD_subset(xpat, det, xmap, n_points=100)
 Ny_c, Nx_c, _, _ = xpatS.data.shape
@@ -52,7 +44,7 @@ det_best, xmap_best, log = optimize_geometry_and_orientations(
     xpat=xpatS,                 # kikuchipy.Patterns, 4D (Ny,Nx,H,W)
     xmap=xmapS,               # your orientation map (provides .orientations)
     det0=detS,                 # initial detector
-    master_pattern=mp_l,       # same one you already use
+    master_pattern=mp,       # same one you already use
     energy=energy_kV,
     keys=['pcx','pcy','pcz','sample_tilt','azimuthal','tilt'],
     steps=[0.01, 0.01, 0.02, 1.0, 0.1, 0.1],

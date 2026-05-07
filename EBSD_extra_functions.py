@@ -4,6 +4,7 @@ import imageio.v3 as iio
 import kikuchipy as kp
 from orix.crystal_map import CrystalMap
 import h5py
+import hyperspy.api as hs
 from kikuchipy.signals.util._master_pattern import _project_single_pattern_from_master_pattern
 from kikuchipy.indexing._refinement._refinement import _get_master_pattern_data
 import EBSD_extra_functions_numba as xfn_nb
@@ -55,6 +56,19 @@ def make_flash_gif(pattern1, pattern2, outpath, duration=0.4, n_flashes=2):
         outpath = str(outpath) + ".gif"
     iio.imwrite(outpath, frames, loop=0, duration=dur_ms, format="GIF")
     return outpath
+
+def load_oxford_mp(mp_path):
+    # Loads an ebsd master pattern created using Oxford's AZtecCrystal software
+    with h5py.File(mp_path,'r') as f:
+        lower_hemisphere = f["Data/Master/Dynamical/Lower"][()]
+        upper_hemisphere = f["Data/Master/Dynamical/Upper"][()]
+    south_signal = hs.signals.Signal2D(lower_hemisphere)
+    north_signal = hs.signals.Signal2D(upper_hemisphere)
+    mp = kp.signals.EBSDMasterPattern([north_signal, south_signal], hemisphere='both',) # Create the EBSDMasterPattern signal, explicitly setting hemispheres
+    mp.hemispheres = {"north", "south"} # Assign hemispheres
+    mp.projection = 'stereographic' #Assign projection
+    mp = mp.as_lambert() # Convert the master pattern to the square Lambert projection
+    return mp
 
 def make_circular_signal_mask(h, w, radius_px=None, invert=True):
     """

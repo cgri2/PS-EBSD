@@ -82,16 +82,8 @@ nav_mask = np.ones((Ny, Nx), dtype=bool)
 nav_mask[0:4, 0:4] = False
 
 #Load master pattern
-f = h5py.File(mp_path,'r')
-lower_hemisphere = f["Data/Master/Dynamical/Lower"]
-upper_hemisphere = f["Data/Master/Dynamical/Upper"]
-south_signal = hs.signals.Signal2D(lower_hemisphere)
-north_signal = hs.signals.Signal2D(upper_hemisphere)
-mp = kp.signals.EBSDMasterPattern([north_signal, south_signal], hemisphere='both',) # Create the EBSDMasterPattern signal, explicitly setting hemispheres
-mp.hemispheres = {"north", "south"} # Assign hemispheres
+mp = xfn.load_oxford_mp(mp_path)
 mp.phase=xmap.phases[0]
-mp.projection = 'stereographic' #Assign projection
-mp = mp.as_lambert() # Convert the master pattern to the square Lambert projection
 
 # ------ Refine a subset of orientations to use for matching --------
 #Define variants

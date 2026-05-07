@@ -49,16 +49,8 @@ xpat.set_scan_calibration(step_x=xmap.dx, step_y=xmap.dy)
 # Circular signal mask
 #signal_mask = xfn.make_circular_signal_mask(py, px)
 # Load master pattern
-with h5py.File(mp_path, 'r') as f:
-    lower_hemisphere = f["Data/Master/Dynamical/Lower"][()]
-    upper_hemisphere = f["Data/Master/Dynamical/Upper"][()]
-south_signal = hs.signals.Signal2D(lower_hemisphere)
-north_signal = hs.signals.Signal2D(upper_hemisphere)
-mp = kp.signals.EBSDMasterPattern([north_signal, south_signal], hemisphere='both')
-mp.hemispheres = {"north", "south"}
+mp = load_oxford_mp(mp_path)
 mp.phase = xmap.phases[0]
-mp.projection = 'stereographic'
-mp = mp.as_lambert()
 # Load calibrated detector
 det_xmap = kp.detectors.EBSDDetector.load(os.path.join(pname, f"{mapname}_CalibratedDetector.txt"))
 print("Loaded detector and master pattern")

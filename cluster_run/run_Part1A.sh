@@ -8,9 +8,12 @@
 
 set -euo pipefail
 
-
 # Load modules and activate virtual environment
-module load stack/2024-06 python/3.12.8
+# only on euler
+if command -v module >/dev/null 2>&1; then
+  module load stack/2024-06 python/3.12.8
+fi
+
 if [[ -f "${PIPE_ROOT}/psebsd_env/bin/activate" ]]; then
   source "${PIPE_ROOT}/psebsd_env/bin/activate"
 fi

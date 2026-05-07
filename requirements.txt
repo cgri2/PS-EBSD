@@ -6,12 +6,15 @@ matplotlib==3.10.3
 scipy==1.11.4
 orix==0.13.3
 hyperspy==2.2.0
-kikuchipy==0.12.dev2
+kikuchipy @ git+https://github.com/pyxem/kikuchipy.git@c4653b492b3bd47694a05fe181ad56ddbc5b12a6
 h5py==3.14.0
 dask==2025.1.0
-tqdm==4.67.1
 distributed==2025.1.0
 dask-mpi==2022.4.0
+mpi4py==4.1.0
+tqdm==4.67.1
 scikit-optimize==0.10.2
 numba==0.61.2
-
+matplotlib-scalebar==0.9.0
+pyvista==0.45.3
+pyebsdindex==0.3.8

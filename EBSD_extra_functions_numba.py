@@ -27,7 +27,7 @@ def axis_angle_to_quaternion(axis, angle_deg):
     return q_normalize(np.array([np.cos(h), axis[0]*s, axis[1]*s, axis[2]*s], dtype=np.float64))
 
 # these functions are copied from Kikuchipy v0.11.2 to make my scripts compatible with the new dev version and venv needed for pattern processing
-@njit(
+@nb.njit(
     "Tuple((float64, float64, float64, float64))(float64, float64, float64)",
     cache=True,
     nogil=True,
@@ -38,7 +38,7 @@ def get_cosine_sine_of_alpha_and_azimuthal_local(sample_tilt, tilt, azimuthal):
     azimuthal = np.deg2rad(azimuthal)
     return np.cos(alpha), np.sin(alpha), np.cos(azimuthal), np.sin(azimuthal)
 
-@njit(
+@nb.njit(
     (
         "float64[:, :, :]"
         "(float64[:], float64[:], float64[:], int64, int64, float64, float64, float64, bool_[:])"

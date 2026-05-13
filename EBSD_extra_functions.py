@@ -83,6 +83,95 @@ def make_circular_signal_mask(h, w, radius_px=None, invert=True):
     inside = (x - cx) ** 2 + (y - cy) ** 2 <= (r ** 2)
     return ~inside if invert else inside
 
+def crop_ebsd_to_square(ebsd, mask=None, p=1.0):
+    """
+    Crop EBSD patterns to a centered square.
+
+    Parameters
+    ----------
+    ebsd : kikuchipy.signals.EBSD
+        EBSD signal with data shape (Ny, Nx, py, px).
+    mask : None or "circular"
+        If None, crop to the largest centered square inside the rectangular pattern.
+        If "circular", crop to the largest centered square inside the circular mask.
+    p : float
+        Fraction of the square side to keep. Default is 1.0.
+        For example, p=0.9 crops an additional 10% of the square width.
+
+    Returns
+    -------
+    ebsd : kikuchipy.signals.EBSD
+        Cropped EBSD signal.
+    crop_info : dict
+        Dictionary with crop coordinates and final pattern shape.
+    """
+    if not (0 < p <= 1):
+        raise ValueError(f"p must be in the range (0, 1], got p={p}")
+
+    if mask not in [None, "circular"]:
+        raise ValueError("mask must be None or 'circular'")
+
+    Ny, Nx, py, px = ebsd.data.shape
+    dtype = ebsd.data.dtype
+
+    # Reset static background so crop_signal does not fail due to shape mismatch
+    ebsd.static_background = np.zeros((py, px), dtype=dtype)
+
+    cy = py // 2
+    cx = px // 2
+
+    if mask == "circular":
+        # Assume circular mask is centered and has diameter equal to the smaller
+        # pattern dimension. Largest inscribed square has side = diameter / sqrt(2).
+        diameter = min(py, px)
+        base_side = diameter / np.sqrt(2)
+
+    else:
+        # Largest square inside rectangular image
+        base_side = min(py, px)
+
+    # Apply additional fractional crop
+    side = int(np.floor(base_side * p))
+
+    # Make side even so the crop is symmetric around the center
+    if side % 2 == 1:
+        side -= 1
+
+    half_side = side // 2
+
+    top = cy - half_side
+    bottom = cy + half_side
+    left = cx - half_side
+    right = cx + half_side
+
+    if top < 0 or left < 0 or bottom > py or right > px:
+        raise ValueError(
+            "Computed crop extends outside the pattern. "
+            f"Pattern shape is ({py}, {px}), crop is "
+            f"top={top}, bottom={bottom}, left={left}, right={right}."
+        )
+
+    ebsd.crop_signal(
+        top=top,
+        bottom=bottom,
+        left=left,
+        right=right,
+    )
+
+    crop_info = {
+        "original_pattern_shape": (py, px),
+        "cropped_pattern_shape": ebsd.data.shape[-2:],
+        "top": top,
+        "bottom": bottom,
+        "left": left,
+        "right": right,
+        "side": side,
+        "mask": mask,
+        "p": p,
+    }
+
+    return ebsd, crop_info
+
 def EBSD_subset(xpat, det, xmap, n_points=None, indices=None, indices_shape=None):
     """
     Subsample EBSD patterns, detector PCs, and CrystalMap consistently.
@@ -354,30 +443,20 @@ def xmap_PS(xmap_old, PS_operation):
     )
     return xmap_PSvar
 
-def crop_detector(det, new_shape, corners):
+def crop_detector(det, corners):
     """
-    crops detector, revising pc values
+    Crop detector and update PC values.
 
-    PARAMETERS
-    ----------
-    det: detector
-    new_shape: (py, px)
-    corners: (x0, x1, y0, y1)
-    
-    OUTPUT
-    ------
-    new cropped detector
+    corners should match kikuchipy's EBSDDetector.crop() extent:
+    (y0, y1, x0, x1)
     """
-    det_cropped = kp.detectors.EBSDDetector(
-            shape=new_shape,
-            pc=det.crop(corners).pc_average,
-            sample_tilt=det.sample_tilt,
-            tilt=det.tilt,
-            azimuthal=det.azimuthal,
-            px_size=det.px_size,
-            binning=det.binning,
-            )
-    return det_cropped    
+    det_cropped = det.crop(corners)
+
+    # det.crop() should already preserve geometry, but ensure twist is retained
+    if hasattr(det, "twist") and hasattr(det_cropped, "twist"):
+        det_cropped.twist = det.twist
+
+    return det_cropped
 
 def choose_nav_chunks(ny, nx, target=100, min_chunk=16, max_chunk=None):
     """

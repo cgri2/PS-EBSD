@@ -84,6 +84,10 @@ ebsd.xmap = CrystalMap(
     phase_list=phase_list,
     )
 
+# Save EBSD dataset to h5 file
+ebsd.compute(show_progressbar=True)
+ebsd.save(os.path.join(pname,f"{mapname}.h5"), overwrite=True)
+
 # Load master pattern
 mp = xfn.load_oxford_mp(mp_path)
 mp.phase = ebsd.xmap.phases[1]

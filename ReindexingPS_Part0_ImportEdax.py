@@ -61,8 +61,8 @@ ebsd.compute(show_progressbar=True)
 ebsd.save(os.path.join(pname,f"{mapname}.h5"), overwrite=True)
 
 # Load master pattern
-mp = xfn.load_oxford_mp(mp_path)
-mp.phase = ebsd.xmap.phases[0]
+mp = xfn.load_oxford_mp(mp_path, xmap=ebsd.xmap)
+#mp.phase = ebsd.xmap.phases[0]
 
 #plot an example patterns
 example_dir = os.path.join(pname, "example_patterns")

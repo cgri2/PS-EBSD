@@ -57,17 +57,62 @@ def make_flash_gif(pattern1, pattern2, outpath, duration=0.4, n_flashes=2):
     iio.imwrite(outpath, frames, loop=0, duration=dur_ms, format="GIF")
     return outpath
 
-def load_oxford_mp(mp_path):
-    # Loads an ebsd master pattern created using Oxford's AZtecCrystal software
-    with h5py.File(mp_path,'r') as f:
+def load_oxford_mp(mp_path, xmap=None):
+    """
+    Load an EBSD master pattern created using Oxford AZtecCrystal.
+
+    Parameters
+    ----------
+    mp_path : str
+        Path to the Oxford master pattern file.
+    xmap : orix.crystal_map.CrystalMap, optional
+        If provided, assign the master pattern phase from the indexed phase
+        in the crystal map. Handles phase IDs 1 or 0, and ignores -1
+        not-indexed pixels.
+
+    Returns
+    -------
+    mp : kikuchipy.signals.EBSDMasterPattern
+        Master pattern converted to Lambert projection, with phase assigned
+        if xmap is provided.
+    """
+    with h5py.File(mp_path, "r") as f:
         lower_hemisphere = f["Data/Master/Dynamical/Lower"][()]
         upper_hemisphere = f["Data/Master/Dynamical/Upper"][()]
+
     south_signal = hs.signals.Signal2D(lower_hemisphere)
     north_signal = hs.signals.Signal2D(upper_hemisphere)
-    mp = kp.signals.EBSDMasterPattern([north_signal, south_signal], hemisphere='both',) # Create the EBSDMasterPattern signal, explicitly setting hemispheres
-    mp.hemispheres = {"north", "south"} # Assign hemispheres
-    mp.projection = 'stereographic' #Assign projection
-    mp = mp.as_lambert() # Convert the master pattern to the square Lambert projection
+
+    mp = kp.signals.EBSDMasterPattern(
+        [north_signal, south_signal],
+        hemisphere="both",
+    )
+
+    mp.hemispheres = {"north", "south"}
+    mp.projection = "stereographic"
+    mp = mp.as_lambert()
+
+    if xmap is not None:
+        phase_ids = np.unique(xmap.phase_id)
+        phase_ids = phase_ids[phase_ids != -1]
+
+        if phase_ids.size == 0:
+            raise ValueError("No indexed phases found in xmap.")
+
+        # Prefer phase 1 if present, otherwise phase 0 if present,
+        # otherwise use the first indexed phase ID.
+        if 1 in xmap.phases.ids and 1 in phase_ids:
+            phase_id = 1
+        elif 0 in xmap.phases.ids and 0 in phase_ids:
+            phase_id = 0
+        else:
+            phase_id = int(phase_ids[0])
+
+        mp.phase = xmap.phases[phase_id]
+
+        print(f"Assigned master pattern phase from xmap phase ID {phase_id}:")
+        print(mp.phase)
+
     return mp
 
 def make_circular_signal_mask(h, w, radius_px=None, invert=True):

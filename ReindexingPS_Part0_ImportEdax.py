@@ -1,16 +1,18 @@
 import kikuchipy as kp
 import numpy as np
 import os
+import h5py
+import hyperspy.api as hs
 from orix.io import plugins
 from orix.crystal_map import Phase, CrystalMap, PhaseList
 from orix.quaternion import Rotation
 import EBSD_extra_functions as xfn
 
-pname = r"/cluster/work/mandm/cgriesbach/EBSDindexing/PSEBSD/PS-EBSD-dev/examples/PZT_Set1S1_OxTest/" #os.environ["PNAME"]
-mapname = r"20260504_PZT_Set1S1_test Specimen 1 Site 2 Map Data 1" #os.environ["MAPNAME"]
-mp_path = r"/cluster/work/mandm/cgriesbach/EBSDindexing/MasterPatterns/PbZr0.52Ti0.48O3_15kV.sdf5" #os.environ.get("MP_PATH","")
+pname = os.environ["PNAME"]
+mapname = os.environ["MAPNAME"]
+mp_path = os.environ["MP_PATH"]
 
-# Load the EBSD map from h5oina file
+# Load the EBSD map from h5 file
 xpat = kp.load(os.path.join(pname,f"{mapname}.h5"),lazy=True) #or can load up1/up2 file directly but check kp version for compatibility
 xmap = plugins.ang.file_reader(os.path.join(pname,f'{mapname}.ang')) #map
 Ny, Nx, py, px = ebsd.data.shape
@@ -36,7 +38,7 @@ det = xfn.crop_detector(det, (py_c, px_c), (y0,y1,x0,x1))
 iy0 = Ny // 2
 ix0 = Nx // 2
 det = det.extrapolate_pc(
-        pc_indices=[iy0, ix0],   # (row, col)#[Ny/2, Nx/2]
+        pc_indices=[iy0, ix0],
         navigation_shape=xmap.shape,
         step_sizes=(xmap.dy, xmap.dx),
         )
@@ -60,10 +62,10 @@ ebsd.save(os.path.join(pname,f"{mapname}.h5"), overwrite=True)
 
 # Load master pattern
 mp = xfn.load_oxford_mp(mp_path)
-mp.phase = ebsd.xmap.phases[1]
+mp.phase = ebsd.xmap.phases[0]
 
 #plot an example patterns
-example_dir = os.path.join(pname, "examples")
+example_dir = os.path.join(pname, "example_patterns")
 os.makedirs(example_dir, exist_ok=True)
 rng = np.random.default_rng()  # optionally use np.random.default_rng(0) for reproducibility
 valid_k = np.where(ebsd.xmap.phase_id != -1)[0] # Valid points: avoid unindexed pixels if phase_id uses -1 for not indexed
@@ -85,7 +87,6 @@ for n, k in enumerate(k_examples, start=1):
     if np.ndim(det1.pc) == 3:
         det1.pc = ebsd.detector.pc[i, j]
     print(det1)
-    print("Detector pc, Oxford convention:", det1.pc_oxford())
 
     # Select point-specific orientation
     rot1 = ebsd.xmap.rotations[k]
@@ -93,7 +94,7 @@ for n, k in enumerate(k_examples, start=1):
     print(rot1.to_euler(degrees=True))
 
     # Simulate one pattern
-    sim = mp_l.get_patterns(
+    sim = mp.get_patterns(
         rotations=rot1,
         detector=det1,
         energy=15,

@@ -1,14 +1,18 @@
 import kikuchipy as kp
 import numpy as np
 import os
+import h5py
+import hyperspy.api as hs
 from orix.io import plugins
 from orix.crystal_map import Phase, CrystalMap, PhaseList
 from orix.quaternion import Rotation
 import EBSD_extra_functions as xfn
 
-pname = r"/cluster/work/mandm/cgriesbach/EBSDindexing/PSEBSD/PS-EBSD-dev/examples/PZT_Set1S1_OxTest/" #os.environ["PNAME"]
-mapname = r"20260504_PZT_Set1S1_test Specimen 1 Site 2 Map Data 1" #os.environ["MAPNAME"]
-mp_path = r"/cluster/work/mandm/cgriesbach/EBSDindexing/MasterPatterns/PbZr0.52Ti0.48O3_15kV.sdf5" #os.environ.get("MP_PATH","")
+pname = os.environ["PNAME"]
+mapname = os.environ["MAPNAME"]
+mp_path = os.environ["MP_PATH"]
+
+map_num = 1
 
 # Load the EBSD map from h5oina file
 ebsd = kp.load(os.path.join(pname, f"{mapname}.h5oina"),lazy=True)
@@ -93,7 +97,7 @@ mp = xfn.load_oxford_mp(mp_path)
 mp.phase = ebsd.xmap.phases[1]
 
 #plot an example patterns
-example_dir = os.path.join(pname, "examples")
+example_dir = os.path.join(pname, "example_patterns")
 os.makedirs(example_dir, exist_ok=True)
 rng = np.random.default_rng()  # optionally use np.random.default_rng(0) for reproducibility
 valid_k = np.where(ebsd.xmap.phase_id != -1)[0] # Valid points: avoid unindexed pixels if phase_id uses -1 for not indexed
@@ -123,7 +127,7 @@ for n, k in enumerate(k_examples, start=1):
     print(rot1.to_euler(degrees=True))
 
     # Simulate one pattern
-    sim = mp_l.get_patterns(
+    sim = mp.get_patterns(
         rotations=rot1,
         detector=det1,
         energy=15,

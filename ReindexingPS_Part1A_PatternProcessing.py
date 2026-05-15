@@ -19,84 +19,35 @@ pname = os.environ["PNAME"]
 mapname = os.environ["MAPNAME"]
 mp_path = os.environ.get("MP_PATH","")
 energy_kV = float(os.environ.get("ENERGY_KV", "25"))
-pcx = float(os.environ["PCX"])
-pcy = float(os.environ["PCY"])
-pcz = float(os.environ["PCZ"])
-sample_tilt_deg = float(os.environ["SAMPLE_TILT_DEG"])
+PS_rotations = os.environ.get("PS_ROTATIONS","")
 # ** review other variables and inputs in script and change as needed **
 
 # ------ Load data and crop -----------------------------------------
-xpat = kp.load(os.path.join(pname,f"{mapname}.h5"),lazy=True)
-xmap = plugins.ang.file_reader(os.path.join(pname,f'{mapname}.ang')) #map
-
-#crop patterns to square mask
-Ny, Nx, py, px = xpat.data.shape
-print(xpat.data.shape)
-sig_shape = (py,px)
-dtype = xpat.data.dtype
-xpat.static_background = np.zeros(sig_shape, dtype=dtype)
-side   = int(np.floor(py/(2*np.sqrt(2))))
-cx = px//2
-x0, x1 = cx-side, cx+side
-xpat.crop_signal(top=x0, bottom=x1, left=x0, right=x1)
-_, _, py_c, px_c = xpat.data.shape
-
-#Define detector
-#pc from vendor
-det = kp.detectors.EBSDDetector(
-        shape=(py,px),
-        pc=(pcx, pcy, pcz),
-        convention='edax',
-        sample_tilt=sample_tilt_deg,
-        tilt=10,
-        azimuthal=-2,
-        px_size=66.67,
-        binning=1,
-        )
-det = xfn.crop_detector(det, (py_c, px_c), (x0,x1,x0,x1))
-iy0 = Ny // 2
-ix0 = Nx // 2
-det_xmap = det.extrapolate_pc(
-        pc_indices=[iy0, ix0],   # (row, col)#[Ny/2, Nx/2],
-        navigation_shape=xmap.shape,
-        step_sizes=(xmap.dy, xmap.dx),
-        )
-det_xmap.save(filename=os.path.join(pname,f"{mapname}_Detector.txt"))
-
-#Package into one ebsd signal
-Ny, Nx, py, px = xpat.data.shape
-sig_shape = (py,px)
-dtype = xpat.data.dtype
-xpat.static_background = np.zeros(sig_shape, dtype=dtype)
-
-EBSDdat = kp.signals.EBSD(
-    xpat,
-    xmap=xmap,
-    detector=det_xmap,
-    static_background=xpat.static_background,
-)
-EBSDdat.set_scan_calibration(step_x=xmap.dx, step_y=xmap.dy)
+ebsd = kp.load(os.path.join(pname,f"{mapname}.h5"),lazy=True)
+xmap = ebsd.xmap
+Ny, Nx, py, px = ebsd.data.shape
+det = ebsd.detector
+det_xmap.save(filename=os.path.join(pname,f"{mapname}_InitialDetector.txt"))
 
 #crop map to only use a subset of patterns
 nav_mask = np.ones((Ny, Nx), dtype=bool)
 nav_mask[0:4, 0:4] = False
 
 #Load master pattern
-mp = xfn.load_oxford_mp(mp_path)
-mp.phase=xmap.phases[0]
+mp = xfn.load_oxford_mp(mp_path, xmap=xmap)
+#mp.phase=xmap.phases[0] 
 
 # ------ Refine a subset of orientations to use for matching --------
 #Define variants
 PS_rotations=Rotation.from_axes_angles(((1, 0, 0),(1, 0, 0),(1, 0, 0),(0, 1, 0),(0, 1, 0)), (180, 90, -90, 90, -90) ,degrees=True)
 
-xmap_ref, pc_ref = EBSDdat.refine_orientation_projection_center(
-    xmap = EBSDdat.xmap,
-    detector = EBSDdat.detector,
+xmap_ref, pc_ref = ebsd.refine_orientation_projection_center(
+    xmap = ebsd.xmap,
+    detector = ebsd.detector,
     master_pattern = mp,
     energy = energy_kV,
     pseudo_symmetry_ops = PS_rotations,
     navigation_mask = nav_mask,
-    #signal_mask = sig_mask,
     method = "LN_NELDERMEAD",
     trust_region = [2, 2, 2, 0.05, 0.05, 0.05],
     rtol = 1e-3,
@@ -114,7 +65,7 @@ sim = mp.get_patterns(
 
 # ------ Define pattern processing workflow- ------------------------
 # Select pattern to optimize
-p0 = EBSDdat.inav[3,3]
+p0 = ebsd.inav[3,3]
 #p0.crop_signal(top=y0, bottom=y1, left=x0, right=x1)
 s = sim.inav[3,3]
 #s.crop_signal(top=y0, bottom=y1, left=x0, right=x1)
@@ -251,7 +202,7 @@ with open(out_path, "w") as f:
 
 # ------ Process all patterns and save to a new h5 file -------------------
 #dynamic background subtraction
-xpat = xpat.remove_dynamic_background(
+ebsd = ebsd.remove_dynamic_background(
             operation='subtract',
             filter_domain='frequency',
             std=best_params["DBS_std"],
@@ -260,7 +211,7 @@ xpat = xpat.remove_dynamic_background(
             inplace=False,
             )
 #adaptive histogram equalization
-xpat = xpat.adaptive_histogram_equalization(
+ebsd = ebsd.adaptive_histogram_equalization(
             kernel_size=(best_params["AHE_kernel"], best_params["AHE_kernel"]),
             clip_limit=best_params["AHE_clip"],
             nbins=best_params["AHE_nbins"],
@@ -271,7 +222,7 @@ xpat = xpat.adaptive_histogram_equalization(
 pattern_shape = (py, px)
 w_low = kp.filters.Window(window="lowpass", cutoff=best_params["FFT_cutL"], cutoff_width=10, shape=pattern_shape)
 w_high = kp.filters.Window(window="highpass", cutoff=best_params["FFT_cutH"], cutoff_width=2, shape=pattern_shape)
-xpat = xpat.fft_filter(
+ebsd = ebsd.fft_filter(
             transfer_function=w_low * w_high,
             function_domain="frequency",
             shift=True,
@@ -282,5 +233,5 @@ ckpt2 = time.time() - start_time
 print(f"Time to finish processing of entire dataset: {ckpt2:.2f} seconds")
 
 #save patterns to h5 file
-xpat.compute(show_progressbar=True)
-xpat.save(os.path.join(pname,f"{mapname}_PP.h5"), overwrite=True)
+ebsd.compute(show_progressbar=True)
+ebsd.save(os.path.join(pname,f"{mapname}_PP.h5"), overwrite=True)

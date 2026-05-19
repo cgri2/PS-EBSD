@@ -11,70 +11,106 @@ from skopt.space import Real, Integer, Categorical
 from skopt.utils import use_named_args
 import time
 import EBSD_extra_functions as xfn
+import pipeline_io as pio
 start_time = time.time()
 
-# ------ File paths -------------------------------------------------
-#read common environment variables from input file or define directly here 
-pname = os.environ["PNAME"]
-mapname = os.environ["MAPNAME"]
-mp_path = os.environ.get("MP_PATH","")
-energy_kV = float(os.environ.get("ENERGY_KV", "25"))
-PS_rotations = os.environ.get("PS_ROTATIONS","")
-# ** review other variables and inputs in script and change as needed **
+# ------ Read variables from config file -----------------------------
+config_path = os.environ["CONFIG_PATH"]
+config = pio.load_config(config_path)
+paths = pio.resolve_pipeline_paths(config, config_path)
+
+pname = paths["pname"]
+mapname = paths["mapname"]
+mp_path = paths["mp_path"]
+h5_path = paths["h5_path"]
+
+energy_kV = float(config["global"]["energy_kV"])
+PS_rotations = pio.get_ps_rotations(config)
+
+cfg1A = config.get("part1A", {})
 
 # ------ Load data and crop -----------------------------------------
-ebsd = kp.load(os.path.join(pname,f"{mapname}.h5"),lazy=True)
+ebsd = kp.load(h5_path,lazy=False)
 xmap = ebsd.xmap
 Ny, Nx, py, px = ebsd.data.shape
 det = ebsd.detector
-det_xmap.save(filename=os.path.join(pname,f"{mapname}_InitialDetector.txt"))
-
-#crop map to only use a subset of patterns
-nav_mask = np.ones((Ny, Nx), dtype=bool)
-nav_mask[0:4, 0:4] = False
-
-#Load master pattern
+det.save(filename=os.path.join(pname,f"{mapname}_InitialDetector.txt"))
 mp = xfn.load_oxford_mp(mp_path, xmap=xmap)
-#mp.phase=xmap.phases[0] 
+
+# Select the single pattern used to optimize the pattern-processing recipe.
+# opt_y/opt_x are row/column indices in the EBSD map.
+opt_y = int(cfg1A.get("opt_y", 3))
+opt_x = int(cfg1A.get("opt_x", 3))
+
+if not (0 <= opt_y < Ny and 0 <= opt_x < Nx):
+    raise ValueError(
+        f"Requested Part1A optimization point (opt_y={opt_y}, opt_x={opt_x}) "
+        f"is outside the map shape (Ny={Ny}, Nx={Nx})."
+    )
+
+k_opt = np.ravel_multi_index((opt_y, opt_x), dims=(Ny, Nx), order="C")
+
+if xmap.phase_id[k_opt] == -1:
+    raise ValueError(
+        f"Requested Part1A optimization point (opt_y={opt_y}, opt_x={opt_x}, k={k_opt}) "
+        "is not indexed, phase_id = -1. Choose an indexed point."
+    )
+
+print(f"Part1A optimization point: opt_y={opt_y}, opt_x={opt_x}, flat index k={k_opt}")
+print("x:", xmap.x[k_opt], "y:", xmap.y[k_opt])
+
+#Create nav mask to only reindex one point
+nav_mask = np.ones((Ny, Nx), dtype=bool)
+nav_mask[opt_y, opt_x] = False
 
 # ------ Refine a subset of orientations to use for matching --------
-#Define variants
-PS_rotations=Rotation.from_axes_angles(((1, 0, 0),(1, 0, 0),(1, 0, 0),(0, 1, 0),(0, 1, 0)), (180, 90, -90, 90, -90) ,degrees=True)
-
 xmap_ref, pc_ref = ebsd.refine_orientation_projection_center(
-    xmap = ebsd.xmap,
-    detector = ebsd.detector,
-    master_pattern = mp,
-    energy = energy_kV,
-    pseudo_symmetry_ops = PS_rotations,
-    navigation_mask = nav_mask,
-    method = "LN_NELDERMEAD",
-    trust_region = [2, 2, 2, 0.05, 0.05, 0.05],
-    rtol = 1e-3,
-    )
+    xmap=ebsd.xmap,
+    detector=ebsd.detector,
+    master_pattern=mp,
+    energy=energy_kV,
+    pseudo_symmetry_ops=PS_rotations,
+    navigation_mask=nav_mask,
+    method="LN_NELDERMEAD",
+    trust_region=[2, 2, 2, 0.05, 0.05, 0.05],
+    rtol=1e-3,
+)
 
-# Prepare simulated patterns
 rotations = xmap_ref.rotations.reshape(*xmap_ref.shape)
-sim = mp.get_patterns(
-    rotations=rotations,
-    detector=pc_ref,
-    energy=energy_kV,  # Energy in keV
-    compute=True,
-    )
-
-
+sim = mp.get_patterns(rotations=rotations, detector=pc_ref, energy=energy_kV, compute=True)
+print(sim.data.shape)
 # ------ Define pattern processing workflow- ------------------------
-# Select pattern to optimize
-p0 = ebsd.inav[3,3]
-#p0.crop_signal(top=y0, bottom=y1, left=x0, right=x1)
-s = sim.inav[3,3]
-#s.crop_signal(top=y0, bottom=y1, left=x0, right=x1)
+"""
+# Extract the selected pattern as a plain NumPy array
+p0_arr = ebsd.inav[opt_x, opt_y].data
+if hasattr(p0_arr, "compute"):
+    p0_arr = p0_arr.compute()
+
+p0_arr = np.asarray(p0_arr)
+
+# Re-wrap as a fresh EBSD signal
+p0 = kp.signals.EBSD(p0_arr)
+
+# Preserve static background expected by kikuchipy processing routines
+p0.static_background = np.zeros(p0_arr.shape, dtype=p0_arr.dtype)
+s = sim.inav[0,0].deepcopy()
+"""
+p0 = ebsd.inav[opt_x, opt_y]
+s = sim.inav[0,0]
 
 # Define NCC function
 def norm_cross_cor(exp, sim):
+    exp = np.asarray(exp, dtype=np.float32)
+    sim = np.asarray(sim, dtype=np.float32)
+
     A = exp - np.mean(exp)
     B = sim - np.mean(sim)
-    return np.sum(A*B)/np.sqrt(np.sum(np.square(A))*np.sum(np.square(B)))
+
+    denom = np.sqrt(np.sum(A * A) * np.sum(B * B))
+    if denom == 0:
+        return 0.0
+
+    return np.sum(A * B) / denom
 
 # Define pattern processing functions
 #    order of functions was determined to be the best by a quick manual optimization approach
@@ -155,9 +191,9 @@ def objective(DBS_std, DBS_trunc, FFT_cutH, FFT_cutL, AHE_kernel, AHE_clip, AHE_
 res = gp_minimize(
     func = objective,
     dimensions = dimensions,
-    n_calls = 150,
-    n_initial_points=12,
-    random_state = 0,
+    n_calls=int(cfg1A.get("n_calls", 150)),
+    n_initial_points=int(cfg1A.get("n_initial_points", 12)),
+    random_state=int(cfg1A.get("random_state", 0)),
 )
 
 # ------ Inspect best result -----------------------------------------------
@@ -180,7 +216,7 @@ def plot_pattern_processing(patterns, titles):
     for ax, pat in zip(axes[1], patterns):
         ax.hist(pat.ravel(), bins=100)
     fig.tight_layout()
-    plt.savefig(os.path.join(pname,f"{mapname}_PatProc.png"),dpi=300)
+    plt.savefig(os.path.join(pname, f"{mapname}_PatProc_y{opt_y}_x{opt_x}.png"),dpi=300)
 
 p1, p2, p3, q, NCC = process_pipeline(p0, **best_params)
 patterns = [s.data, p0.data, p1.data, p2.data, p3.data]
@@ -195,10 +231,14 @@ print(f"Time to finish optimization: {ckpt1:.2f} seconds")
 #write to a txt file
 out_path = os.path.join(pname, f"{mapname}_ProcessingParameters.txt")
 with open(out_path, "w") as f:
-    f.write(f"Best Q = {best_quality}\n"
-            f"at params: {best_params}\n"
-            f"Image Quality: {q}\n"
-            f"Normalized Cross Correlation: {NCC}\n")
+    f.write(
+        f"Optimization point: opt_y={opt_y}, opt_x={opt_x}, k={k_opt}\n"
+        f"x = {xmap.x[k_opt]}, y = {xmap.y[k_opt]}\n"
+        f"Best Q = {best_quality}\n"
+        f"at params: {best_params}\n"
+        f"Image Quality: {q}\n"
+        f"Normalized Cross Correlation: {NCC}\n"
+    )
 
 # ------ Process all patterns and save to a new h5 file -------------------
 #dynamic background subtraction
@@ -233,5 +273,4 @@ ckpt2 = time.time() - start_time
 print(f"Time to finish processing of entire dataset: {ckpt2:.2f} seconds")
 
 #save patterns to h5 file
-ebsd.compute(show_progressbar=True)
-ebsd.save(os.path.join(pname,f"{mapname}_PP.h5"), overwrite=True)
+ebsd.save(os.path.join(pname,f"{mapname}.h5"), overwrite=True)

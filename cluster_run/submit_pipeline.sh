@@ -3,33 +3,24 @@ set -euo pipefail
 
 # Usage:
 #   ./submit_pipeline.sh \
-#     --pname PATH_TO_DATA \
-#     --mapname MAPNAME \
-#     --mp_path PATH_TO_MASTER_PATTERN \
-#     --energy BEAM_ENERGY
+#     --config PATH_TO_CONFIG \
+#     --start-from PART_TO_START_ON \
+#     --end-on PART_TO_END_ON \
 # Allowed pipeline parts:
 #   1A = Pattern processing
 #   1B = Neighbor pattern averaging
 #   1C = Global geometry refinement
 #    2 = PS refinement / CI-WCC selection
 # ---- Default inputs ----
+CONFIG_PATH=""
 START_FROM="1A" #default (change if code series partially ran to skip completed steps); allowed: 1A, 1B, 1C, 2
 END_ON="2"	#default (change to end on earlier step); allowed: 1A, 1B, 1C, 2
-PNAME=""	#path to data
-MAPNAME=""	#name of dataset (should be consistent between pattern file and orientation data file)
-MP_PATH=""	#path to master pattern h5 file
-ENERGY="25"	#beam energy
-RADIUS="7"	#radius for PSS-NPA
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --config) CONFIG_PATH="$2"; shift 2;;
     --start-from) START_FROM="$2"; shift 2;;
     --end-on) END_ON="$2"; shift 2;;
-    --pname)   PNAME="$2"; shift 2;;
-    --mapname) MAPNAME="$2"; shift 2;;
-    --mp_path) MP_PATH="$2"; shift 2;;
-    --energy)  ENERGY="$2"; shift 2;;
-    --radius) RADIUS="$2"; shift 2;;
     *) echo "Unknown arg: $1" >&2; exit 2;;
   esac
 done
@@ -42,10 +33,6 @@ case "$END_ON" in
   1A|1B|1C|2) ;;
   *) echo "--end-on must be one of: 1A, 1B, 1C, 2" >&2; exit 2;;
 esac
-if [[ -z "${PNAME}" || -z "${MAPNAME}" || -z "${MP_PATH}" ]]; then
-  echo "Missing required args. Need --pname, --mapname, --mp_path" >&2
-  exit 2
-fi
 
 part_rank() {
   case "$1" in
@@ -65,9 +52,9 @@ PIPE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SBATCH_DIR="${PIPE_ROOT}/cluster_run"
 
 # Common exports passed to every job:
-EXPORTS="ALL,PNAME=${PNAME},MAPNAME=${MAPNAME},MP_PATH=${MP_PATH},ENERGY_KV=${ENERGY},RADIUS=${RADIUS},PIPE_ROOT=${PIPE_ROOT}"
-
-LOG_DIR="${PNAME}/logs"
+EXPORTS="ALL,CONFIG_PATH=${CONFIG_PATH},PIPE_ROOT=${PIPE_ROOT}"
+CONFIG_DIR="$(cd "$(dirname "${CONFIG_PATH}")" && pwd)"
+LOG_DIR="${CONFIG_DIR}/logs"
 mkdir -p "${LOG_DIR}"
 
 dep=""  # dependency string for the next job (e.g. afterok:12345)

@@ -427,16 +427,28 @@ pat_N =  xpat_NPA.reshape(Ny * Nx, py, px)
 
 pattern_path = "Scan 1/EBSD/Data/patterns"
 
-if not overwrite_h5:
-    # Make the staged NPA file by copying the Part1A output file.
+if overwrite_h5:
+    # Safer in-place behavior:
+    # 1. Copy current H5 to a temporary file.
+    # 2. Modify the temporary file.
+    # 3. Replace the original only after the write succeeds.
+    tmp_h5 = h5_out + ".tmp"
+
+    print(f"Creating temporary H5 copy:\n  from: {h5_in}\n  to:   {tmp_h5}")
+    shutil.copyfile(h5_in, tmp_h5)
+
+    write_h5 = tmp_h5
+
+else:
+    # Staged behavior:
+    # read {mapname}_PP.h5, write {mapname}_PP_NPA{r}.h5
     print(f"Copying H5 file:\n  from: {h5_in}\n  to:   {h5_out}")
     shutil.copyfile(h5_in, h5_out)
-else:
-    # In overwrite mode, h5_in and h5_out are both {mapname}.h5.
-    h5_out = h5_in
+
+    write_h5 = h5_out
 
 #open copied file and replace pattern data with npa patterns
-with h5py.File(h5_out, "r+") as f:
+with h5py.File(write_h5, "r+") as f:
     if pattern_path not in f:
         raise ValueError(f"{pattern_path} not found in file.")
     pat_O = f[pattern_path]
@@ -451,6 +463,11 @@ with h5py.File(h5_out, "r+") as f:
 
     # Overwrite pattern data
     pat_O[...] = pat_N
+
+
+if overwrite_h5:
+    print(f"Replacing original H5:\n  tmp: {tmp_h5}\n  dst: {h5_out}")
+    os.replace(tmp_h5, h5_out)
 
 print(f"Saved NPA patterns")
 ckpt2 = time.time() - start_time

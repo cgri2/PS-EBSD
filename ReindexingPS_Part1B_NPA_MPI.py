@@ -9,27 +9,35 @@ from pathlib import Path
 from tqdm import tqdm
 from dask.distributed import Client, wait
 from dask_mpi import initialize
+import pipeline_io as pio
 import time
 start_time=time.time()
 
-#Filepaths
-#read common environment variables from input file or define directly here
-pname = os.environ["PNAME"]
-mapname = os.environ["MAPNAME"]
-r=int(os.environ["RADIUS"]) #radius for NPA
-#Define kwargs for jump detection
-lookback = int(os.environ.get("NPA_LOOKBACK", 20))
-lookahead = int(os.environ.get("NPA_LOOKAHEAD", 20))
-z = float(os.environ.get("NPA_Z", 5.0))
-ncc_min = float(os.environ.get("NPA_NCC_MIN", 0.05))
-w_pre = int(os.environ.get("NPA_W_PRE", 10))
-w_post = int(os.environ.get("NPA_W_POST", 10))
-step_z = float(os.environ.get("NPA_STEP_Z", 3.0))
-step_abs_min = float(os.environ.get("NPA_STEP_ABS_MIN", 0.005))
-max_keep_env = os.environ.get("NPA_MAX_KEEP", "80")
-max_keep = None if max_keep_env.lower() == "none" else int(max_keep_env)
+# ---------- Read variables from config file ----------------------
+config_path = os.environ["CONFIG_PATH"]
+config = pio.load_config(config_path)
+paths = pio.resolve_pipeline_paths(config, config_path)
 
-# ** review other variables and inputs in script and change as needed **
+pname = paths["pname"]
+mapname = paths["mapname"]
+mp_path = paths["mp_path"]
+overwrite_h5 = pio.get_overwrite_h5(config)
+h5_in = pio.h5_path_for_stage(config, config_path, "Part1B_input")
+h5_out = pio.h5_path_for_stage(config, config_path, "Part1B_output")
+
+cfg1B = config.get("part1B", {})
+# Neighbor pattern averaging settings
+r = int(cfg1B.get("radius", 7))
+lookback = int(cfg1B.get("lookback", 20))
+lookahead = int(cfg1B.get("lookahead", 20))
+z = float(cfg1B.get("z", 5.0))
+ncc_min = float(cfg1B.get("ncc_min", 0.05))
+w_pre = int(cfg1B.get("w_pre", 10))
+w_post = int(cfg1B.get("w_post", 10))
+step_z = float(cfg1B.get("step_z", 3.0))
+step_abs_min = float(cfg1B.get("step_abs_min", 0.005))
+max_keep_raw = cfg1B.get("max_keep", 80)
+max_keep = None if str(max_keep_raw).lower() == "none" else int(max_keep_raw)
 
 # ─── 1) Start your Dask‐MPI cluster ────────────────────────────────────────────
 num_workers = int(os.environ.get("SLURM_NTASKS", os.cpu_count())) - 2 #reads ntasks from job script and reserves 2 tasks for other roles
@@ -47,7 +55,7 @@ client = Client()
 
 # ─── 2) Load & chunk patterns ─────────────────────────────────────────────────
 #Load data from an h5 file (warning: loading from up2 does not work with MPI/dask)
-xpat=kp.load(os.path.join(pname,f"{mapname}_PP.h5"),lazy=True)
+xpat=kp.load(h5_in,lazy=True)
 Ny, Nx, py, px = xpat.data.shape
 data_type=xpat.data.dtype
 #Pad in navigation dimensions to preserve edges
@@ -189,16 +197,6 @@ def _npa_block(block, r, jump_kwargs, max_keep=None, targets_padded=None, pname=
                if 0 < abs(di) + abs(dj) <= r]
 
     os.makedirs(pname, exist_ok=True)
-
-    # --- print parameters once per worker process ---
-    global _printed_first_jump_params
-    if not globals().get("_printed_first_jump_params", False):
-        print("\n===== first_jump_cutoff parameters (from driver) =====", flush=True)
-        for k in sorted(jump_kwargs):
-            print(f"{k:15s} = {jump_kwargs[k]!r}", flush=True)
-        print(f"{'max_keep':15s} = {max_keep!r}", flush=True)
-        print("=====================================================\n", flush=True)
-        _printed_first_jump_params = True
     
     for i in range(r, r + B0):
         for j in range(r, r + B1):
@@ -380,7 +378,6 @@ jump_kwargs = dict(
     step_z=step_z,
     step_abs_min=step_abs_min,   # <- your 0.01 will actually propagate
 )
-max_keep = globals().get("max_keep", None)
 
 pat_npa = xpat_pad.map_overlap(
     lambda block, block_info=None: _npa_block(
@@ -425,18 +422,21 @@ ckpt1 = time.time() - start_time
 print(f"Time to finish NPA: {ckpt1:.2f} seconds")
 
 # ─── 5) Save patterns to h5 file  ────────────────────────────────────────────────
-#copy h5 file of original patterns (including all metadata)
-Opath = os.path.join(pname, f"{mapname}_PP.h5")
-Npath = os.path.join(pname, f"{mapname}_PP_NPA{r}.h5")
-shutil.copyfile(Opath,Npath)
-
 #Configure patterns for saving
 pat_N =  xpat_NPA.reshape(Ny * Nx, py, px)
 
+pattern_path = "Scan 1/EBSD/Data/patterns"
+
+if not overwrite_h5:
+    # Make the staged NPA file by copying the Part1A output file.
+    print(f"Copying H5 file:\n  from: {h5_in}\n  to:   {h5_out}")
+    shutil.copyfile(h5_in, h5_out)
+else:
+    # In overwrite mode, h5_in and h5_out are both {mapname}.h5.
+    h5_out = h5_in
+
 #open copied file and replace pattern data with npa patterns
-with h5py.File(Npath, "r+") as f:
-    pattern_path = "Scan 1/EBSD/Data/patterns"
-    # Double check path, data shape and type
+with h5py.File(h5_out, "r+") as f:
     if pattern_path not in f:
         raise ValueError(f"{pattern_path} not found in file.")
     pat_O = f[pattern_path]

@@ -29,8 +29,17 @@ PS_rotations = pio.get_ps_rotations(config)
 
 cfg1A = config.get("part1A", {})
 
+overwrite_h5 = pio.get_overwrite_h5(config)
+
+h5_in = pio.h5_path_for_stage(config, config_path, "Part1A_input")
+h5_out = pio.h5_path_for_stage(config, config_path, "Part1A_output")
+
+print(f"Part1A input H5:  {h5_in}")
+print(f"Part1A output H5: {h5_out}")
+print(f"overwriteH5:      {overwrite_h5}")
+
 # ------ Load data and crop -----------------------------------------
-ebsd = kp.load(h5_path,lazy=False)
+ebsd = kp.load(h5_in,lazy=False)
 xmap = ebsd.xmap
 Ny, Nx, py, px = ebsd.data.shape
 det = ebsd.detector
@@ -273,4 +282,6 @@ ckpt2 = time.time() - start_time
 print(f"Time to finish processing of entire dataset: {ckpt2:.2f} seconds")
 
 #save patterns to h5 file
-ebsd.save(os.path.join(pname,f"{mapname}.h5"), overwrite=True)
+ebsd.save(h5_out, overwrite=True)
+ckpt3 = time.time() - ckpt2
+print(f"EBSD dataset saved as {h5_path} (took {ckpt3:.2f} seconds)")

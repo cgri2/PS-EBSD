@@ -81,3 +81,54 @@ def get_ps_rotations(config: dict[str, Any]):
 
     return Rotation.from_axes_angles(axes, angles, degrees=True)
 
+def get_overwrite_h5(config: dict) -> bool:
+    """Return global overwriteH5 setting."""
+    return bool(config.get("global", {}).get("overwriteH5", True))
+
+
+def get_part1b_radius(config: dict) -> int:
+    """Return Part1B NPA radius."""
+    return int(config.get("part1B", {}).get("radius", 7))
+
+
+def h5_path_for_stage(config: dict, config_path, stage: str) -> str:
+    """
+    Return the H5 path to read/write for a pipeline stage.
+
+    Stages:
+        Part0_output
+        Part1A_input
+        Part1A_output
+        Part1B_input
+        Part1B_output
+        Part1C_input
+        Part1C_output
+        Part2_input
+    """
+    paths = resolve_pipeline_paths(config, config_path)
+    pname = Path(paths["pname"])
+    mapname = paths["mapname"]
+
+    overwrite = get_overwrite_h5(config)
+    radius = get_part1b_radius(config)
+
+    h5_original = pname / f"{mapname}.h5"
+    h5_pp = pname / f"{mapname}_PP.h5"
+    h5_npa = pname / f"{mapname}_PP_NPA{radius}.h5"
+
+    if overwrite:
+        return str(h5_original)
+
+    if stage in ("Part0_output", "Part1A_input"):
+        return str(h5_original)
+
+    if stage == "Part1A_output":
+        return str(h5_pp)
+
+    if stage == "Part1B_input":
+        return str(h5_pp)
+
+    if stage in ("Part1B_output", "Part1C_input", "Part1C_output", "Part2_input"):
+        return str(h5_npa)
+
+    raise ValueError(f"Unknown stage: {stage}")

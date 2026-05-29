@@ -39,7 +39,7 @@ print(f"Part1A output H5: {h5_out}")
 print(f"overwriteH5:      {overwrite_h5}")
 
 # ------ Load data and crop -----------------------------------------
-ebsd = kp.load(h5_in,lazy=False)
+ebsd = kp.load(h5_in,lazy=True)
 xmap = ebsd.xmap
 Ny, Nx, py, px = ebsd.data.shape
 det = ebsd.detector
@@ -89,22 +89,13 @@ rotations = xmap_ref.rotations.reshape(*xmap_ref.shape)
 sim = mp.get_patterns(rotations=rotations, detector=pc_ref, energy=energy_kV, compute=True)
 print(sim.data.shape)
 # ------ Define pattern processing workflow- ------------------------
-"""
-# Extract the selected pattern as a plain NumPy array
+# build a 1-pattern signal for processing optimization/plotting
 p0_arr = ebsd.inav[opt_x, opt_y].data
-if hasattr(p0_arr, "compute"):
-    p0_arr = p0_arr.compute()
-
-p0_arr = np.asarray(p0_arr)
-
-# Re-wrap as a fresh EBSD signal
+p0_arr = p0_arr.compute()
+p0_arr = np.squeeze(np.asarray(p0_arr))
 p0 = kp.signals.EBSD(p0_arr)
-
-# Preserve static background expected by kikuchipy processing routines
 p0.static_background = np.zeros(p0_arr.shape, dtype=p0_arr.dtype)
-s = sim.inav[0,0].deepcopy()
-"""
-p0 = ebsd.inav[opt_x, opt_y]
+
 s = sim.inav[0,0]
 
 # Define NCC function
@@ -228,7 +219,13 @@ def plot_pattern_processing(patterns, titles):
     plt.savefig(os.path.join(pname, f"{mapname}_PatProc_y{opt_y}_x{opt_x}.png"),dpi=300)
 
 p1, p2, p3, q, NCC = process_pipeline(p0, **best_params)
-patterns = [s.data, p0.data, p1.data, p2.data, p3.data]
+patterns = [
+    np.squeeze(s.data),
+    np.squeeze(p0.data),
+    np.squeeze(p1.data),
+    np.squeeze(p2.data),
+    np.squeeze(p3.data),
+]
 plot_pattern_processing(
     patterns, ["Simulated","No processing", "DBS", "DBS + AHE", "DBS + AHE + FFT"]
 )

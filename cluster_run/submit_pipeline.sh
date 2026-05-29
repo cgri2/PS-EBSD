@@ -93,6 +93,23 @@ print(value)
 PY
 }
 
+print_resources() {
+  local part="$1"
+  local time="$2"
+  local ntasks="$3"
+  local nodes="$4"
+  local cpus="$5"
+  local mem="$6"
+
+  echo "Submitting ${part} with resources:"
+  echo "  time          = ${time}"
+  echo "  ntasks        = ${ntasks}"
+  echo "  nodes         = ${nodes}"
+  echo "  cpus/task     = ${cpus}"
+  echo "  mem/cpu       = ${mem}"
+  echo ""
+}
+
 dep=""  # dependency string for the next job (e.g. afterok:12345)
 
 start_rank=$(part_rank "$START_FROM")
@@ -116,6 +133,7 @@ P1A_CPUS=$(get_resource "Part1A" "cpus_per_task" "1")
 P1A_MEM=$(get_resource "Part1A" "mem_per_cpu" "64G")
 
 if (( start_rank <= 1 && end_rank >= 1 )); then
+  print_resources "Part1A" "${P1A_TIME}" "${P1A_NTASKS}" "${P1A_NODES}" "${P1A_CPUS}" "${P1A_MEM}"
   jid1=$(sbatch --parsable \
     --time="${P1A_TIME}" \
     --ntasks="${P1A_NTASKS}" \
@@ -137,9 +155,10 @@ P1B_CPUS=$(get_resource "Part1B" "cpus_per_task" "1")
 P1B_MEM=$(get_resource "Part1B" "mem_per_cpu" "6G")
 
 if (( start_rank <= 2 && end_rank >= 2 )); then
+  print_resources "Part1B" "${P1B_TIME}" "${P1B_NTASKS}" "${P1B_NODES}" "${P1B_CPUS}" "${P1B_MEM}"
   if [[ -n "$dep" ]]; then
     jid2=$(sbatch --parsable \
-  
+      --dependency="$dep" \
       --time="${P1B_TIME}" \
       --ntasks="${P1B_NTASKS}" \
       --nodes="${P1B_NODES}" \
@@ -160,7 +179,7 @@ if (( start_rank <= 2 && end_rank >= 2 )); then
       --error="${LOG_DIR}/Part1B_%j.err" \
       --export="${EXPORTS}" \
       "${SBATCH_DIR}/run_Part1B_MPI.sh")
-  fi	
+  fi
   echo "Submitted Part1B as ${jid2}${dep:+ (depends on $dep)}"
   dep="afterok:${jid2}"
 fi
@@ -172,6 +191,7 @@ P1C_CPUS=$(get_resource "Part1C" "cpus_per_task" "1")
 P1C_MEM=$(get_resource "Part1C" "mem_per_cpu" "16G")
 
 if (( start_rank <= 3 && end_rank >= 3 )); then
+  print_resources "Part1C" "${P1C_TIME}" "${P1C_NTASKS}" "${P1C_NODES}" "${P1C_CPUS}" "${P1C_MEM}"
   if [[ -n "$dep" ]]; then
     jid3=$(sbatch --parsable \
       --dependency="$dep" \
@@ -207,8 +227,10 @@ P2_CPUS=$(get_resource "Part2" "cpus_per_task" "1")
 P2_MEM=$(get_resource "Part2" "mem_per_cpu" "8G")
 
 if (( start_rank <= 4 && end_rank >= 4 )); then
+  print_resources "Part2" "${P2_TIME}" "${P2_NTASKS}" "${P2_NODES}" "${P2_CPUS}" "${P2_MEM}"
   if [[ -n "$dep" ]]; then
     jid4=$(sbatch --parsable \
+      --dependency="$dep" \
       --time="${P2_TIME}" \
       --ntasks="${P2_NTASKS}" \
       --nodes="${P2_NODES}" \

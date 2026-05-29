@@ -7,6 +7,8 @@ from orix.io import plugins
 from orix.crystal_map import Phase, CrystalMap, PhaseList
 from orix.quaternion import Rotation
 import EBSD_extra_functions as xfn
+import time
+start_time = time.time()
 
 pname = os.environ["PNAME"]
 mapname = os.environ["MAPNAME"]
@@ -87,10 +89,14 @@ ebsd.xmap = CrystalMap(
     y=y,
     phase_list=phase_list,
     )
+ckpt1 = time.time() - start_time
+print(f"Time to finish building EBSD signal: {ckpt1:.2f} seconds")
 
 # Save EBSD dataset to h5 file
-ebsd.compute(show_progressbar=True)
+#ebsd.compute(show_progressbar=True)
 ebsd.save(os.path.join(pname,f"{mapname}.h5"), overwrite=True)
+ckpt2 = time.time() - ckpt1
+print(f"Time to finish saving h5: {ckpt2:.2f} seconds")
 
 # Load master pattern
 mp = xfn.load_oxford_mp(mp_path, xmap=ebsd.xmap)

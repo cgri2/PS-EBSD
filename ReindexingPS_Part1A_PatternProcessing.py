@@ -9,6 +9,12 @@ from orix.quaternion import Rotation
 from skopt import gp_minimize
 from skopt.space import Real, Integer, Categorical
 from skopt.utils import use_named_args
+import shutil
+import gc
+import dask.array as da
+from pathlib import Path
+from dask.distributed import Client, wait
+from dask_mpi import initialize
 import time
 import EBSD_extra_functions as xfn
 import pipeline_io as pio
@@ -30,15 +36,13 @@ PS_rotations = pio.get_ps_rotations(config)
 cfg1A = config.get("part1A", {})
 
 overwrite_h5 = pio.get_overwrite_h5(config)
-
 h5_in = pio.h5_path_for_stage(config, config_path, "Part1A_input")
 h5_out = pio.h5_path_for_stage(config, config_path, "Part1A_output")
-
 print(f"Part1A input H5:  {h5_in}")
 print(f"Part1A output H5: {h5_out}")
 print(f"overwriteH5:      {overwrite_h5}")
 
-# ------ Load data and crop -----------------------------------------
+# ------ Load data  -----------------------------------------
 ebsd = kp.load(h5_in,lazy=True)
 xmap = ebsd.xmap
 Ny, Nx, py, px = ebsd.data.shape
@@ -246,7 +250,7 @@ with open(out_path, "w") as f:
         f"Normalized Cross Correlation: {NCC}\n"
     )
 
-# ------ Process all patterns and save to a new h5 file -------------------
+# ------ Process all patterns (builds lazy processing graph)  -------------------
 #dynamic background subtraction
 ebsd = ebsd.remove_dynamic_background(
             operation='subtract',
@@ -275,10 +279,28 @@ ebsd = ebsd.fft_filter(
             inplace=False,
             show_progressbar=False,
             )
-ckpt2 = time.time() - start_time
-print(f"Time to finish processing of entire dataset: {ckpt2:.2f} seconds")
+# Save (this may take a long time since processing steps need to be computed)
+save_chunk_y = int(cfg1A.get("save_chunk_y", 8))
+save_chunk_x = int(cfg1A.get("save_chunk_x", 8))
+ebsd.data = ebsd.data.rechunk((save_chunk_y, save_chunk_x, -1, -1))
+print("Chunks before save:", ebsd.data.chunks)
+# save patterns to h5 file
+if os.path.abspath(h5_out) == os.path.abspath(h5_in):
+    h5_out_path = Path(h5_out)
+    tmp_h5 = str(h5_out_path.with_name(h5_out_path.stem + "_tmp" + h5_out_path.suffix))
 
-#save patterns to h5 file
-ebsd.save(h5_out, overwrite=True)
-ckpt3 = time.time() - ckpt2
-print(f"EBSD dataset saved as {h5_path} (took {ckpt3:.2f} seconds)")
+    if os.path.exists(tmp_h5):
+        os.remove(tmp_h5)
+
+    print(f"h5_out equals h5_in, saving to temporary file first:\n  tmp: {tmp_h5}")
+    ebsd.save(tmp_h5, overwrite=True)
+
+    print(f"Replacing original H5:\n  tmp: {tmp_h5}\n  dst: {h5_out}")
+    os.replace(tmp_h5, h5_out)
+
+else:
+    ebsd.save(h5_out, overwrite=True)
+
+ckpt3 = time.time() - start_time
+print(f"EBSD dataset saved as {h5_out}")
+print(f"Total Part1A time: {ckpt3:.2f} seconds")

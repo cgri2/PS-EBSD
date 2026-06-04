@@ -94,6 +94,7 @@ print(f"Time to finish building EBSD signal: {ckpt1:.2f} seconds")
 
 # Save EBSD dataset to h5 file
 #ebsd.compute(show_progressbar=True)
+ebsd.data = ebsd.data.rechunk((64, 64, -1, -1))
 ebsd.save(os.path.join(pname,f"{mapname}.h5"), overwrite=True)
 ckpt2 = time.time() - ckpt1
 print(f"Time to finish saving h5: {ckpt2:.2f} seconds")

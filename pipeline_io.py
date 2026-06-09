@@ -81,6 +81,19 @@ def get_ps_rotations(config: dict[str, Any]):
 
     return Rotation.from_axes_angles(axes, angles, degrees=True)
 
+def get_instrument(config: dict[str, Any]) -> str:
+    """Return instrument type: 'oxford' (default) or 'edax'."""
+    val = str(config.get("global", {}).get("instrument", "oxford")).lower().strip()
+    if val not in ("oxford", "edax"):
+        raise ValueError(f"global.instrument must be 'oxford' or 'edax', got '{val}'")
+    return val
+
+
+def get_detector_config(config: dict[str, Any]) -> dict[str, Any]:
+    """Return the detector-related keys from the [part1A] config section."""
+    return dict(config.get("part1A", {}))
+
+
 def get_overwrite_h5(config: dict) -> bool:
     """Return global overwriteH5 setting."""
     return bool(config.get("global", {}).get("overwriteH5", True))

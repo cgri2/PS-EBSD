@@ -56,13 +56,16 @@ ebsd = kp.signals.EBSD(
 )
 ebsd.set_scan_calibration(step_x=xmap.dx, step_y=xmap.dy)
 
-# Save EBSD dataset to h5 file
-ebsd.compute(show_progressbar=True)
-ebsd.save(os.path.join(pname,f"{mapname}.h5"), overwrite=True)
+# Save EBSD dataset to h5 file (**use part 1A to save w/ parallel processing)
+#ebsd.compute(show_progressbar=True)
+#ebsd.data = ebsd.data.rechunk((64, 64, -1, -1))
+#ebsd.save(os.path.join(pname,f"{mapname}.h5"), overwrite=True)
+#ckpt2 = time.time() - ckpt1
+#print(f"Time to finish saving h5: {ckpt2:.2f} seconds")
 
 # Load master pattern
 mp = xfn.load_oxford_mp(mp_path, xmap=ebsd.xmap)
-#mp.phase = ebsd.xmap.phases[0]
+#mp.phase = ebsd.xmap.phases[1]
 
 #plot an example patterns
 example_dir = os.path.join(pname, "example_patterns")
@@ -70,7 +73,8 @@ os.makedirs(example_dir, exist_ok=True)
 rng = np.random.default_rng()  # optionally use np.random.default_rng(0) for reproducibility
 valid_k = np.where(ebsd.xmap.phase_id != -1)[0] # Valid points: avoid unindexed pixels if phase_id uses -1 for not indexed
 # Randomly choose 3 unique indexed points
-k_examples = rng.choice(valid_k, size=3, replace=False)
+k_examples = rng.choice(valid_k, size=5, replace=False)
+# k_examples = np.array([1,3000,5000],dtype=int) #or provide a vector of indices to plot
 
 for n, k in enumerate(k_examples, start=1):
 

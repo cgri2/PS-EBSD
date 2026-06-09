@@ -4,6 +4,7 @@ import os
 import shutil
 import kikuchipy as kp
 import h5py
+import dask
 import dask.array as da
 from pathlib import Path
 from tqdm import tqdm
@@ -47,6 +48,18 @@ mem = (
     if os.environ.get("SLURM_MEM_PER_CPU")
     else "auto"
     )
+# Increase TCP/heartbeat timeouts before initializing the cluster.
+# Workers run a GIL-bound Python loop that can legitimately block the event loop
+# for 60-120 s per chunk; without these settings the scheduler kills healthy workers.
+dask.config.set({
+    "distributed.scheduler.worker-ttl": None,        # disable heartbeat-based killing
+    "distributed.comm.timeouts.tcp": "600s",
+    "distributed.comm.timeouts.connect": "120s",
+    "distributed.worker.memory.target": 0.70,        # spill to disk above 70 %
+    "distributed.worker.memory.spill": 0.80,         # hard spill above 80 %
+    "distributed.worker.memory.pause": 0.90,         # pause tasks above 90 %
+    "distributed.worker.memory.terminate": 0.98,     # terminate only at 98 %
+})
 #Lanch the dask cluster
 dask_tmp = Path(pname) / "dask-temp" / "dask-mpi-workers"
 dask_tmp.mkdir(parents=True, exist_ok=True)
@@ -60,13 +73,18 @@ Ny, Nx, py, px = xpat.data.shape
 data_type=xpat.data.dtype
 #Pad in navigation dimensions to preserve edges
 xpat_pad = da.pad(xpat.data, pad_width=((r, r), (r, r), (0, 0), (0, 0)), mode='edge')
-#Auto-compute chunk size from workers and map dimensions and rechunk
-chunk_nav = max(1, int(np.ceil(Ny / np.sqrt(num_workers))))
+# Use a fixed small chunk size so each task takes ~30-60 s and fits comfortably in
+# worker memory. The previous formula (Ny/sqrt(N_workers)) produced chunks of
+# ~90x90 patterns that required 14-17 GB per task, exceeded the 12 GB worker limit,
+# blocked the event loop for 20+ min, and caused heartbeat-timeout worker deaths.
+# A 32x32 chunk uses ~2 GB peak memory and finishes in ~60 s per task, giving workers
+# a proper task queue and keeping the scheduler responsive.
+chunk_nav = int(cfg1B.get("chunk_nav", 32))
 xpat_pad = xpat_pad.rechunk((chunk_nav, chunk_nav, -1, -1))
 #distribute patterns to workers
 xpat_pad = xpat_pad.persist()
-client.rebalance(xpat_pad)
-print("Rechunked over workers:",client.who_has(xpat_pad))
+wait(xpat_pad)
+print(f"Rechunked: nav chunk size = {chunk_nav}, grid = {xpat_pad.numblocks[:2]}, total nav chunks = {xpat_pad.numblocks[0]*xpat_pad.numblocks[1]}")
 
 # ─── 3) Define a per‐chunk NPA function ──────────────────────────────────────
 def select_random_targets(Ny, Nx, K=5, seed=42):
@@ -402,68 +420,64 @@ with tqdm(total=1, desc="Dask NPA computation") as pbar:
 
 #remove padding
 pat_npa = pat_npa[r:-r, r:-r]   #crop padded patterns to return to original Ny x Nx map
-pat_float = pat_npa.compute()   
-vmin, vmax = pat_float.min(), pat_float.max()   #compute intensity range
-#normalize patterns and convert back to original data type
-norm = (pat_float - vmin) / (vmax - vmin)
-norm = np.clip(norm, 0, 1)
+
+# Compute vmin/vmax with two cheap reductions (no full materialisation on driver).
+# The old pat_float = pat_npa.compute() would pull Ny*Nx*py*px float32 bytes to the
+# driver — ~600 GB for a 153 GB uint8 source — which is not feasible.
+vmin = float(pat_npa.min().compute())
+vmax = float(pat_npa.max().compute())
+print(f"NPA intensity range: [{vmin}, {vmax}]")
+
+#normalize patterns and convert back to original data type (stays lazy)
+norm = (pat_npa - vmin) / (vmax - vmin)
+norm = da.clip(norm, 0, 1)
 if data_type == "uint8":
-    scaled = norm * 255
-    xpat_NPA = scaled.astype(np.uint8)
+    xpat_NPA = (norm * 255).astype(np.uint8)
 elif data_type == "uint16":
-    scaled = norm * 65535
-    xpat_NPA=scaled.astype(np.uint16)
+    xpat_NPA = (norm * 65535).astype(np.uint16)
 else:
     raise ValueError("data_type must be 'uint8' or 'uint16'")
-print(xpat_NPA.shape)
+print(f"NPA output shape: {xpat_NPA.shape}, dtype: {xpat_NPA.dtype}")
 print('NPA complete')
 
 ckpt1 = time.time() - start_time
 print(f"Time to finish NPA: {ckpt1:.2f} seconds")
 
 # ─── 5) Save patterns to h5 file  ────────────────────────────────────────────────
-#Configure patterns for saving
-pat_N =  xpat_NPA.reshape(Ny * Nx, py, px)
+#Configure patterns for saving — keep lazy until the actual write
+pat_N = xpat_NPA.reshape(Ny * Nx, py, px)
 
 pattern_path = "Scan 1/EBSD/Data/patterns"
 
 if overwrite_h5:
-    # Safer in-place behavior:
-    # 1. Copy current H5 to a temporary file.
-    # 2. Modify the temporary file.
-    # 3. Replace the original only after the write succeeds.
     tmp_h5 = h5_out + ".tmp"
-
     print(f"Creating temporary H5 copy:\n  from: {h5_in}\n  to:   {tmp_h5}")
     shutil.copyfile(h5_in, tmp_h5)
-
     write_h5 = tmp_h5
-
 else:
-    # Staged behavior:
-    # read {mapname}_PP.h5, write {mapname}_PP_NPA{r}.h5
     print(f"Copying H5 file:\n  from: {h5_in}\n  to:   {h5_out}")
     shutil.copyfile(h5_in, h5_out)
-
     write_h5 = h5_out
 
-#open copied file and replace pattern data with npa patterns
-with h5py.File(write_h5, "r+") as f:
+# Validate shapes/dtypes before the expensive write
+with h5py.File(write_h5, "r") as f:
     if pattern_path not in f:
         raise ValueError(f"{pattern_path} not found in file.")
-    pat_O = f[pattern_path]
-    print("Original pattern shape:", pat_O.shape, "; New pattern shape:", pat_N.shape)
-    print("Original pattern dtype:", pat_O.dtype, "; New pattern dtype:", pat_N.dtype)
-    print("Original pattern intensity range:", pat_O[0,0].min(), ",", pat_O[0,0].max())
-    print("New pattern intensity range:", pat_N[0,0].min(), ",", pat_N[0,0].max())
-    if pat_N.shape != pat_O.shape:
-        raise ValueError(f"Shape mismatch: {pat_N.shape} != {pat_O.shape}")
-    if pat_N.dtype != pat_O.dtype:
-        raise ValueError(f"dtype mismatch: {pat_N.dtype} != {pat_O.dtype}")
+    pat_O_shape = f[pattern_path].shape
+    pat_O_dtype = f[pattern_path].dtype
+    print("Original pattern shape:", pat_O_shape, "; New pattern shape:", pat_N.shape)
+    print("Original pattern dtype:", pat_O_dtype, "; New pattern dtype:", pat_N.dtype)
+    if pat_N.shape != pat_O_shape:
+        raise ValueError(f"Shape mismatch: {pat_N.shape} != {pat_O_shape}")
+    if pat_N.dtype != pat_O_dtype:
+        raise ValueError(f"dtype mismatch: {pat_N.dtype} != {pat_O_dtype}")
 
-    # Overwrite pattern data
-    pat_O[...] = pat_N
-
+# Stream the lazy dask array directly into the h5 dataset in chunks.
+# This avoids materialising the entire output (~300-600 GB for a 153 GB source)
+# on the driver before writing.
+with h5py.File(write_h5, "r+") as f:
+    ds = f[pattern_path]
+    da.store(pat_N, ds, lock=False, compute=True)
 
 if overwrite_h5:
     print(f"Replacing original H5:\n  tmp: {tmp_h5}\n  dst: {h5_out}")

@@ -1,16 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-import shutil
 import kikuchipy as kp
-import h5py
 import dask
 import dask.array as da
 from pathlib import Path
-from tqdm import tqdm
-from dask.distributed import Client, wait
+from dask.distributed import Client, wait, as_completed
 from dask_mpi import initialize
 import pipeline_io as pio
+import EBSD_extra_functions as xfn
 import time
 start_time=time.time()
 
@@ -413,10 +411,30 @@ pat_npa = xpat_pad.map_overlap(
     trim=False
 )
 
-with tqdm(total=1, desc="Dask NPA computation") as pbar:
-    pat_npa = client.persist(pat_npa)
-    wait(pat_npa)
-    pbar.update()
+t_npa = time.time()
+ny_blocks, nx_blocks = pat_npa.numblocks[:2]
+total_nav_chunks = ny_blocks * nx_blocks
+print(f"Starting NPA: {total_nav_chunks} nav chunks ({ny_blocks}×{nx_blocks} grid)", flush=True)
+
+pat_npa = client.persist(pat_npa)
+# client.futures_of() returns one future per output chunk of the persisted array.
+# as_completed fires as each chunk finishes on a worker, without pulling data
+# to the driver.
+futures = list(client.futures_of(pat_npa))
+n_futures = len(futures)
+done = 0
+for _ in as_completed(futures):
+    done += 1
+    elapsed = time.time() - t_npa
+    pct = 100.0 * done / n_futures
+    rate = done / elapsed if elapsed > 0 else 1e-9
+    eta = (n_futures - done) / rate
+    print(
+        f"  NPA {done}/{n_futures} ({pct:.1f}%) | {elapsed:.1f}s elapsed | ETA ~{eta:.0f}s",
+        flush=True,
+    )
+
+wait(pat_npa)
 
 #remove padding
 pat_npa = pat_npa[r:-r, r:-r]   #crop padded patterns to return to original Ny x Nx map
@@ -440,50 +458,42 @@ else:
 print(f"NPA output shape: {xpat_NPA.shape}, dtype: {xpat_NPA.dtype}")
 print('NPA complete')
 
+# Persist the output dtype array so the write step reads from worker memory
+# rather than re-triggering NPA + normalize for every write chunk.
+# del pat_npa releases the float32 persisted data (4× larger) from workers.
+print("Persisting NPA output to workers...", flush=True)
+xpat_NPA = client.persist(xpat_NPA)
+wait(xpat_NPA)
+del pat_npa
+
 ckpt1 = time.time() - start_time
 print(f"Time to finish NPA: {ckpt1:.2f} seconds")
 
 # ─── 5) Save patterns to h5 file  ────────────────────────────────────────────────
-#Configure patterns for saving — keep lazy until the actual write
-pat_N = xpat_NPA.reshape(Ny * Nx, py, px)
-
 pattern_path = "Scan 1/EBSD/Data/patterns"
 
 if overwrite_h5:
-    tmp_h5 = h5_out + ".tmp"
-    print(f"Creating temporary H5 copy:\n  from: {h5_in}\n  to:   {tmp_h5}")
-    shutil.copyfile(h5_in, tmp_h5)
-    write_h5 = tmp_h5
+    h5_out_path = Path(h5_out)
+    write_h5 = str(h5_out_path.with_name(h5_out_path.stem + "_tmp" + h5_out_path.suffix))
 else:
-    print(f"Copying H5 file:\n  from: {h5_in}\n  to:   {h5_out}")
-    shutil.copyfile(h5_in, h5_out)
     write_h5 = h5_out
-
-# Validate shapes/dtypes before the expensive write
-with h5py.File(write_h5, "r") as f:
-    if pattern_path not in f:
-        raise ValueError(f"{pattern_path} not found in file.")
-    pat_O_shape = f[pattern_path].shape
-    pat_O_dtype = f[pattern_path].dtype
-    print("Original pattern shape:", pat_O_shape, "; New pattern shape:", pat_N.shape)
-    print("Original pattern dtype:", pat_O_dtype, "; New pattern dtype:", pat_N.dtype)
-    if pat_N.shape != pat_O_shape:
-        raise ValueError(f"Shape mismatch: {pat_N.shape} != {pat_O_shape}")
-    if pat_N.dtype != pat_O_dtype:
-        raise ValueError(f"dtype mismatch: {pat_N.dtype} != {pat_O_dtype}")
-
-# Stream the lazy dask array directly into the h5 dataset in chunks.
-# This avoids materialising the entire output (~300-600 GB for a 153 GB source)
-# on the driver before writing.
-with h5py.File(write_h5, "r+") as f:
-    ds = f[pattern_path]
-    da.store(pat_N, ds, lock=False, compute=True)
-
+xfn.write_dask_pattern_array_to_h5_from_driver(
+    data=xpat_NPA,
+    h5_template=h5_in,
+    h5_out=write_h5,
+    client=client,
+    Ny=Ny, Nx=Nx, py=py, px=px,
+    pattern_path=pattern_path,
+    chunk_y=chunk_nav, chunk_x=chunk_nav,
+    max_in_flight=4,
+    overwrite=True,
+    out_dtype=data_type,
+    cast_mode=None,
+)
 if overwrite_h5:
-    print(f"Replacing original H5:\n  tmp: {tmp_h5}\n  dst: {h5_out}")
-    os.replace(tmp_h5, h5_out)
-
-print(f"Saved NPA patterns")
+    print(f"Replacing original H5:\n  tmp: {write_h5}\n  dst: {h5_out}")
+    os.replace(write_h5, h5_out)
 ckpt2 = time.time() - start_time
-print(f"Time to finish NPA and saving: {ckpt2:.2f} seconds")
+print(f"NPA patterns saved to {h5_out}")
+print(f"Total time (NPA + save): {ckpt2:.2f} seconds")
 

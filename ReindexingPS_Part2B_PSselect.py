@@ -26,7 +26,7 @@ outdir_suffix = cfg2.get("outdir_suffix", f"NPA{r}_Refine-1step")
 outdir = os.path.join(pname, f"{mapname}_{outdir_suffix}")
 
 PS_rotations = pio.get_ps_rotations(config)
-n_variants = len(PS_rotations) + 1
+n_variants = PS_rotations.size + 1
 
 print(f"Part2B: assembling {n_variants} variants from {outdir}")
 

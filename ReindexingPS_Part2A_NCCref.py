@@ -5,6 +5,7 @@ from orix import io
 from pathlib import Path
 import kikuchipy as kp
 import h5py
+import dask
 from dask.distributed import Client, wait
 from dask_mpi import initialize
 from collections import Counter
@@ -48,12 +49,31 @@ if os.path.exists(ang_out) and os.path.exists(h5_out):
     print(f"V{vi} already complete ({ang_out}). Skipping.")
     sys.exit(0)
 
+skip_refinement = os.path.exists(ang_out) and not os.path.exists(h5_out)
+if skip_refinement:
+    print(f"V{vi}: .ang exists but no .h5 — skipping refinement, recomputing CI/WCC only.")
+
 # ---- Initialize Dask/MPI ----
 num_workers = int(os.environ.get("SLURM_NTASKS", os.cpu_count())) - 2
 mem = (1024 * 1024 * int(os.environ["SLURM_MEM_PER_CPU"])
        if os.environ.get("SLURM_MEM_PER_CPU") else "auto")
 dask_tmp = Path(pname) / "dask-temp" / f"dask-mpi-V{vi}"
 dask_tmp.mkdir(parents=True, exist_ok=True)
+# Increase TCP/heartbeat timeouts before initializing the cluster.
+# Workers run a GIL-bound Python loop that can legitimately block the event loop
+# for 60-120 s per chunk; without these settings the scheduler kills healthy workers.
+# Also force task-based rechunking to avoid the P2P shuffle path, whose in-flight
+# state goes inconsistent (P2PConsistencyError) once any worker is evicted this way.
+dask.config.set({
+    "distributed.scheduler.worker-ttl": None,        # disable heartbeat-based killing
+    "distributed.comm.timeouts.tcp": "600s",
+    "distributed.comm.timeouts.connect": "120s",
+    "distributed.worker.memory.target": 0.70,        # spill to disk above 70 %
+    "distributed.worker.memory.spill": 0.80,         # hard spill above 80 %
+    "distributed.worker.memory.pause": 0.90,         # pause tasks above 90 %
+    "distributed.worker.memory.terminate": 0.98,     # terminate only at 98 %
+    "array.rechunk.method": "tasks",                 # avoid P2P shuffle for rechunk
+})
 initialize(nthreads=1, memory_limit=mem, local_directory=str(dask_tmp))
 client = Client()
 print("dashboard:", client.dashboard_link)
@@ -87,44 +107,48 @@ print("Chunks per worker:", dict(owners))
 t1 = time.time()
 print(f"Time to finish setup: {t1 - start:.2f} s")
 
-# ---- Build seed for this variant ----
-PS_rotations = pio.get_ps_rotations(config)
-seed = xmap if vi == 0 else xfn.xmap_PS(xmap, PS_rotations[vi - 1])
+# ---- Refine orientations or load existing results ----
+if not skip_refinement:
+    PS_rotations = pio.get_ps_rotations(config)
+    seed = xmap if vi == 0 else xfn.xmap_PS(xmap, PS_rotations[vi - 1])
 
-# ---- Refine orientations ----
-print(f"--- Refining variant V{vi} ---")
-print("Refinement information:")
-print(f"  Method: {cfg2.get('minimize_method', 'Powell')} (local) from SciPy")
-print(f"  Trust region (+/-): {cfg2.get('trust_region', [2, 2, 2])}")
-print(f"  Keyword arguments passed to method: {{'method': '{cfg2.get('minimize_method', 'Powell')}', 'options': {{'maxiter': {int(cfg2.get('maxiter', 300))}}}}}")
-print(f"Refining {Ny * Nx} orientation(s):")
+    print(f"--- Refining variant V{vi} ---")
+    print("Refinement information:")
+    print(f"  Method: {cfg2.get('minimize_method', 'Powell')} (local) from SciPy")
+    print(f"  Trust region (+/-): {cfg2.get('trust_region', [2, 2, 2])}")
+    print(f"  Keyword arguments passed to method: {{'method': '{cfg2.get('minimize_method', 'Powell')}', 'options': {{'maxiter': {int(cfg2.get('maxiter', 300))}}}}}")
+    print(f"Refining {Ny * Nx} orientation(s):")
 
-ref_results = xpat.refine_orientation(
-    xmap=seed,
-    detector=det_xmap,
-    master_pattern=mp,
-    pseudo_symmetry_ops=None,
-    energy=energy_kV,
-    method=cfg2.get("method", "minimize"),
-    method_kwargs={
-        "method": cfg2.get("minimize_method", "Powell"),
-        "options": {"maxiter": int(cfg2.get("maxiter", 300))},
-    },
-    trust_region=cfg2.get("trust_region", [2, 2, 2]),
-    rtol=float(cfg2.get("rtol", 1e-4)),
-    compute=False,
-    rechunk=False,
-)
-xmap_ref = kp.indexing.compute_refine_orientation_results(
-    results=ref_results,
-    xmap=seed,
-    master_pattern=mp,
-    pseudo_symmetry_checked=False,
-)
+    ref_results = xpat.refine_orientation(
+        xmap=seed,
+        detector=det_xmap,
+        master_pattern=mp,
+        pseudo_symmetry_ops=None,
+        energy=energy_kV,
+        method=cfg2.get("method", "minimize"),
+        method_kwargs={
+            "method": cfg2.get("minimize_method", "Powell"),
+            "options": {"maxiter": int(cfg2.get("maxiter", 300))},
+        },
+        trust_region=cfg2.get("trust_region", [2, 2, 2]),
+        rtol=float(cfg2.get("rtol", 1e-4)),
+        compute=False,
+        rechunk=False,
+    )
+    xmap_ref = kp.indexing.compute_refine_orientation_results(
+        results=ref_results,
+        xmap=seed,
+        master_pattern=mp,
+        pseudo_symmetry_checked=False,
+    )
 
-io.save(ang_out, xmap_ref, overwrite=True)
-t2 = time.time()
-print(f"Finished refinement of variant V{vi} in: {t2 - t1:.2f} s. Saved map.")
+    io.save(ang_out, xmap_ref, overwrite=True)
+    t2 = time.time()
+    print(f"Finished refinement of variant V{vi} in: {t2 - t1:.2f} s. Saved map.")
+else:
+    print(f"Loading existing refinement results from {ang_out}")
+    xmap_ref = io.load(ang_out)
+    t2 = time.time()
 
 # ---- Compute CI/WCC metrics ----
 CI_map, eta_map, Xi_e_map, Xi_t_map, Xi_eN_map = xfn.compute_wcc_map(

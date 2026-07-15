@@ -102,6 +102,3 @@ print(det_final)
 
 #Save the calibrated detector to the h5 file and txt file
 det_final.save(filename=os.path.join(pname,f"{mapname}_CalibratedDetector.txt"))
-ebsd.detector = det_final
-print(f"Saving Part1C-updated detector to: {h5_out}")
-#ebsd.save(h5_out, overwrite=True)

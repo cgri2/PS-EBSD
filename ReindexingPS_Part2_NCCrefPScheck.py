@@ -13,20 +13,41 @@ from dask_mpi import initialize
 from collections import Counter
 import time
 import EBSD_extra_functions as xfn
+import pipeline_io as pio
 start = time.time()
 
 # -------------------------- Initialize: filepaths and start dask jobs ---------------------------------------
-#read common environment variables from input file or define directly here 
-# ** review other variables and inputs in script and change as needed **
-pname = os.environ["PNAME"]
-mapname = os.environ["MAPNAME"]
-mp_path = os.environ.get("MP_PATH", "")
-energy_kV = float(os.environ.get("ENERGY_KV", "25"))
-r = int(os.environ["RADIUS"])
+# -------------------- Read variables from config file --------------------
+config_path = os.environ.get("CONFIG_PATH")
+if not config_path:
+    raise RuntimeError(
+        "CONFIG_PATH is not set. Submit with: "
+        "submit_pipeline.sh --config /path/to/PS-EBSD_config.toml"
+    )
 
-outdir = os.path.join(pname, f"{mapname}_NPA{r}_Refine-1step")
+config = pio.load_config(config_path)
+paths = pio.resolve_pipeline_paths(config, config_path)
+
+pname = paths["pname"]
+mapname = paths["mapname"]
+mp_path = paths["mp_path"]
+
+energy_kV = float(config["global"]["energy_kV"])
+overwrite_h5 = pio.get_overwrite_h5(config)
+
+cfg1B = config.get("part1B", {})
+r = int(cfg1B.get("radius", 7))
+
+cfg2 = config.get("part2", {})
+
+h5_in = pio.h5_path_for_stage(config, config_path, "Part2_input")
+
+print(f"Part2 input H5: {h5_in}")
+print(f"overwriteH5:    {overwrite_h5}")
+
+outdir_suffix = cfg2.get("outdir_suffix", f"NPA{r}_Refine-1step")
+outdir = os.path.join(pname, f"{mapname}_{outdir_suffix}")
 os.makedirs(outdir, exist_ok=True)
-os.makedirs("logs", exist_ok=True)
 
 # Start dask jobs
 num_workers = int(os.environ.get("SLURM_NTASKS", os.cpu_count())) - 2
@@ -40,19 +61,21 @@ print("dashboard:", client.dashboard_link)
 print("Scheduler address:", client.scheduler.address)
 
 # ------------------------- Load data and prepare for reindexing ----------------------------------------------
-# Load crystal map (from hough data)
-xmap = plugins.ang.file_reader(os.path.join(pname, f"{mapname}.ang"))
-# Load patterns
-xpat = kp.load(os.path.join(pname, f"{mapname}_PP_NPA{r}.h5"), lazy=True)
+xpat = kp.load(h5_in, lazy=True)
+xmap = xpat.xmap
 Ny, Nx, py, px = xpat.data.shape
 xpat.set_scan_calibration(step_x=xmap.dx, step_y=xmap.dy)
-# Circular signal mask
-#signal_mask = xfn.make_circular_signal_mask(py, px)
-# Load master pattern
-mp = xfn.load_oxford_mp(mp_path)
-mp.phase = xmap.phases[0]
-# Load calibrated detector
-det_xmap = kp.detectors.EBSDDetector.load(os.path.join(pname, f"{mapname}_CalibratedDetector.txt"))
+det_path = os.path.join(pname, f"{mapname}_CalibratedDetector.txt")
+if os.path.exists(det_path):
+    det_xmap = kp.detectors.EBSDDetector.load(det_path)
+    print(f"Loaded calibrated detector from: {det_path}")
+else:
+    det_xmap = xpat.detector
+    print(
+        f"WARNING: Calibrated detector file not found: {det_path}\n"
+        "Using detector stored in the H5 file instead."
+    )
+mp = xfn.load_oxford_mp(mp_path,xmap=xmap)
 print("Loaded detector and master pattern")
 # Rechunk patterns
 cy, cx, nyc, nxc, total = xfn.choose_nav_chunks(Ny, Nx, target=5*max(1, num_workers), min_chunk=24)
@@ -66,12 +89,7 @@ t1 = time.time()
 print(f"Time to finish setup: {t1 - start:.2f} s")
 
 # ----------------------- Refine orientations within each of 6 PS "bubbles" ----------------------------------
-# PS ops
-PS_rotations = Rotation.from_axes_angles(
-    ((1,0,0),(1,0,0),(1,0,0),(0,1,0),(0,1,0)),
-    (180,90,-90,90,-90),
-    degrees=True
-)
+PS_rotations = pio.get_ps_rotations(config)
 
 # Build 6 seeds: V0 = original xmap, V1..V5 = PS_applied
 seed_maps = [xmap] + [xfn.xmap_PS(xmap, PS_rotations[k]) for k in range(5)]
@@ -98,11 +116,13 @@ for vi, seed in enumerate(seed_maps):
         master_pattern=mp,
         pseudo_symmetry_ops=None,
         energy=energy_kV,
-        #signal_mask=signal_mask,
-        method="minimize",
-        method_kwargs={"method": "Powell", "options": {"maxiter": 300}},
-        trust_region=[2, 2, 2],
-        rtol=1e-4,
+        method=cfg2.get("method", "minimize"),
+        method_kwargs={
+            "method": cfg2.get("minimize_method", "Powell"),
+            "options": {"maxiter": int(cfg2.get("maxiter", 300))},
+        },
+        trust_region=cfg2.get("trust_region", [2, 2, 2]),
+        rtol=float(cfg2.get("rtol", 1e-4)),
         compute=False,
         rechunk=False,
     )

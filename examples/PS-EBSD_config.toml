@@ -1,0 +1,240 @@
+# ============================================================
+# PS-EBSD pipeline configuration
+# ============================================================
+
+[global]
+# Instrument / data source.  Supported values: "oxford"  (h5oina + h5oina detector),
+#                                               "edax"    (kp h5 + ang file)
+instrument = "oxford"
+
+# Path to the folder containing the EBSD map files.
+pname = "/{filepath}"
+
+# Dataset/map name. The canonical pipeline file is assumed to be: {pname}/{mapname}.h5 (same mapname for all input files -- h5, up2, ang)
+mapname = "{mapname}"
+
+# Path to the EBSD master pattern file. (Oxford sdf5 MP file, easy to change reader in code to another Kikuchipy supported type)
+mp_path = "{filepath_to_mp}.sdf5"
+
+# Beam energy in keV used for pattern simulation/refinement.
+energy_kV = 15.0
+
+# Pseudosymmetry rotations used throughout the pipeline.
+# For now, define these in a simple axis-angle representation.
+# Each row is [axis_x, axis_y, axis_z, angle_deg].
+# Below relations for tetragonal ferroelectric variants:
+#   180 deg about x
+#    90 deg about x
+#   -90 deg about x
+#    90 deg about y
+#   -90 deg about y
+PS_rotations = [
+  [1, 0, 0, 180],
+  [1, 0, 0,  90],
+  [1, 0, 0, -90],
+  [0, 1, 0,  90],
+  [0, 1, 0, -90],
+]
+
+# If true, each pipeline part overwrites the current canonical H5 file in place.
+# If false, Part1A and Part1B write new H5 files:
+#   Part0  -> {mapname}.h5
+#   Part1A -> {mapname}_PP.h5
+#   Part1B -> {mapname}_PP_NPA{radius}.h5
+# Part1C: only the detector is output as a txt file.
+overwriteH5 = true
+
+# ============================================================
+# Slurm resource settings
+# ============================================================
+# These values are used by submit_pipeline.sh when submitting jobs.
+# They override the default #SBATCH values in the run_Part*.sh files.
+#
+# Guidelines:
+# - Part1A loads, processes, and saves the full pattern file. Processing and saving
+#   of the full pattern stack is done with Dask/MPI. Total memory required should be
+#   ntasks * mem_per_cpu plus margin. 
+#
+# - Part1B uses Dask/MPI and lazy loading. Total memory is approximately:
+#       ntasks * mem_per_cpu
+#   It usually does not need one worker to hold the full H5 file, but each worker
+#   must hold chunks, padding, neighbors, and temporary arrays. Larger NPA radius
+#   and larger patterns require more memory.
+#
+# - Part1C usually operates on a subset of patterns for geometry refinement, so
+#   memory is often modest compared with Part1A. Increase time rather than memory
+#   if the refinement is slow.
+#
+# - Part2A uses Dask/MPI and repeated refinement/simulation. Increase ntasks for
+#   more parallel workers, and increase time for larger maps.
+# 
+# - Part2B is done on a single worker and requires minimal memory for selecting the correct 
+#   variant solution from the independent refinement steps from Part2A.
+#
+# Slurm time format: "HH:MM:SS"
+# Memory format: "16G", "64G", etc.
+
+[resources.Part1A]
+time = "08:00:00"
+ntasks = 32
+nodes = 1
+cpus_per_task = 1
+mem_per_cpu = "14G"
+
+[resources.Part1B]
+time = "15:00:00"
+ntasks = 64
+nodes = 1
+cpus_per_task = 1
+mem_per_cpu = "10G"
+
+[resources.Part1C]
+time = "5:00:00"
+ntasks = 1
+nodes = 1
+cpus_per_task = 1
+mem_per_cpu = "16G"
+
+[resources.Part2A]
+time = "120:00:00"
+ntasks = 96
+nodes = 1
+cpus_per_task = 1
+mem_per_cpu = "5G"
+stagger_minutes = 20
+
+[resources.Part2B]
+time = "01:00:00"
+ntasks = 1
+nodes = 1
+cpus_per_task = 1
+mem_per_cpu = "16G"
+
+[part1A]
+# Pattern-processing optimization settings.
+
+# Navigation point used for optimizing the pattern-processing recipe.
+# Recommendation: use a "good" pattern from outputted gifs from Part0.
+opt_y = 100
+opt_x = 100
+
+# Chunking parameters for parallel save
+save_chunk_y = 24
+save_chunk_x = 24
+save_max_in_flight = 4
+save_cast_mode = "clip"
+
+# ------------------------------------------------------------
+# Detector geometry
+# ------------------------------------------------------------
+# Oxford only: when true, tilt/azimuthal/twist/px_size are read from the
+# h5oina header automatically.  Set false to use only the values below.
+auto_load = true
+
+# Convention for the projection center (pc) values below.
+# Oxford auto-load always uses "oxford"; supply this only when providing
+# pc manually or when instrument = "edax".
+# Supported values passed to kikuchipy: "oxford", "edax", "tsl", "bruker",
+#                                       "emsoft", "emsoft4", "emsoft5"
+# convention = "oxford"
+
+# Uncomment any value to override the auto-loaded result (Oxford) or to
+# supply it directly (EDAX — sample_tilt, px_size, pc, and convention
+# are required; tilt/azimuthal/twist default to 0 if omitted).
+# sample_tilt = 70.0    # degrees; sample tilt from horizontal
+# tilt        = 0.0     # degrees; detector tilt from vertical
+# azimuthal   = 0.0     # degrees; detector azimuthal rotation
+# twist       = 0.0     # degrees; detector twist
+# px_size     = 13.23   # microns; detector pixel size (unbinned)
+# binning     = 1       # detector binning factor
+# pc = [0.5, 0.5, 0.5]  # initial projection center (required for EDAX)
+
+[part1B]
+# Neighbor pattern averaging settings.
+
+chunk_nav = 24
+
+# Manhattan-neighborhood radius for candidate neighbor patterns.
+radius = 5
+
+# Number of previous sorted-NCC differences used to estimate the local baseline.
+lookback = 10
+
+# Number of following sorted-NCC differences used to estimate the local baseline.
+lookahead = 10
+
+# Robust z-score threshold for detecting the first significant NCC jump.
+z = 4.0
+
+# Minimum NCC at the candidate jump point.
+ncc_min = 0.05
+
+# Number of NCC points before the jump used for sustained-step validation.
+w_pre = 10
+
+# Number of NCC points after the jump used for sustained-step validation.
+w_post = 10
+
+# Required sustained step in units of robust pre-window scale.
+step_z = 2.0
+
+# Absolute minimum sustained NCC step.
+step_abs_min = 0.005
+
+# Maximum number of neighbors to keep.
+# Use "none" to disable the cap.
+max_keep = 50
+
+# Number of diagnostic target pixels to plot.
+diagnostic_targets = 8
+
+# Random seed for diagnostic target selection.
+diagnostic_seed = 123
+
+
+[part1C]
+# Global geometry refinement settings.
+
+# Number of sampled points used for geometry refinement.
+n_points = 100
+
+# Geometry parameters to refine.
+keys = ["pcx", "pcy", "pcz", "sample_tilt", "azimuthal", "tilt", "twist"]
+
+# Finite-difference steps for the corresponding keys.
+steps = [0.01, 0.01, 0.02, 1.0, 0.5, 0.5, 0.5]
+
+# Pattern binning used during geometry refinement.
+binning = 4
+
+# ROI grid for DIC-style matching.
+nrows = 8
+ncols = 8
+
+# Pattern index used for diagnostic plots/GIFs.
+out_idx = [1, 1]
+
+# Maximum geometry-refinement iterations.
+max_iters = 10
+
+[part2]
+# Pseudosymmetry refinement and CI/WCC selection settings.
+
+# Output folder suffix for Part2 diagnostic outputs.
+outdir_suffix = "PS-reindexing"
+
+# Orientation refinement method.
+method = "minimize"
+
+# scipy minimize method used by kikuchipy when method = "minimize".
+minimize_method = "Powell"
+
+# Maximum orientation-refinement iterations per variant.
+maxiter = 300
+
+# Orientation trust region.
+trust_region = [2, 2, 2]
+
+# Relative tolerance.
+rtol = 1e-4
+

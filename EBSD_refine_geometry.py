@@ -1,4 +1,3 @@
-# ebsd_all_in_one.py
 from __future__ import annotations
 import numpy as np
 import cv2
@@ -354,7 +353,8 @@ def avg_field_sparseFeatures(
     binning: Optional[int] = None,
     noise_mov_sigma: Optional[float] = None,
     params: SparseParams = SPARSE_DEFAULTS,
-    max_hops: int = 2
+    max_hops: int = 2,
+    indexed_mask: Optional[np.ndarray] = None,
 ):
     """Compute average sparse LK field per ROI over a nav grid."""
     # --- Coerce to plain NumPy 4D arrays
@@ -372,6 +372,8 @@ def avg_field_sparseFeatures(
 
     for iy in range(Ny):
         for ix in range(Nx):
+            if indexed_mask is not None and not indexed_mask[iy, ix]:
+                continue
             ref2d = ref4d[iy, ix]
             mov2d = mov4d[iy, ix]
             if noise_mov_sigma is not None and noise_mov_sigma > 0:
@@ -401,7 +403,8 @@ def expsim_fingerprint(
     nrows: int, ncols: int,
     noise_sim_sigma: Optional[float] = 0.05,
     params: SparseParams = SPARSE_DEFAULTS,
-    max_hops: int = 2
+    max_hops: int = 2,
+    indexed_mask: Optional[np.ndarray] = None,
 ):
     """Return SIM->EXP average displacement field using sparse features."""
     # Force 4D arrays
@@ -416,7 +419,8 @@ def expsim_fingerprint(
         stack_ref_un=x4d, stack_mov_un=s4d,
         nrows=nrows, ncols=ncols,
         binning=binning, noise_mov_sigma=noise_sim_sigma,
-        params=params, max_hops=max_hops
+        params=params, max_hops=max_hops,
+        indexed_mask=indexed_mask,
     )
     v_sim2exp = -v_exp2sim
     return centers, v_sim2exp, counts
@@ -562,7 +566,7 @@ def apply_det_update(
     if not update_pc:
         return det
 
-    tilt_keys = {"sample_tilt", "azimuthal", "tilt"}
+    tilt_keys = {"sample_tilt", "azimuthal", "tilt", "twist"}
     if xmap is None or not any(k in tilt_keys for k in keys):
         return det
 
@@ -678,6 +682,7 @@ def one_step_geometry_refinement(
     jacobian_method: str = "fingerprint",   # "fingerprint" or "pcc"
     xmap=None,
     update_pc=False,
+    indexed_mask: Optional[np.ndarray] = None,
 ) -> Dict[str, object]:
     """
     One-step refinement using chosen Jacobian:
@@ -703,7 +708,7 @@ def one_step_geometry_refinement(
         # Residual b from SIM(det0) -> EXP
         centers, v_before, roi_counts = expsim_fingerprint(
             xpat_4d, spat0, binning, nrows, ncols, noise_sim_sigma,
-            params=params, max_hops=max_hops
+            params=params, max_hops=max_hops, indexed_mask=indexed_mask,
         )
         b_full = field_to_vector(v_before)
 
@@ -725,9 +730,9 @@ def one_step_geometry_refinement(
                 spat_m = _N_to_nav(_stack_to_NHW(spat_m), (Ny, Nx))
 
             _, v_p, _ = expsim_fingerprint(xpat_4d, spat_p, binning, nrows, ncols, noise_sim_sigma,
-                                           params=params, max_hops=max_hops)
+                                           params=params, max_hops=max_hops, indexed_mask=indexed_mask)
             _, v_m, _ = expsim_fingerprint(xpat_4d, spat_m, binning, nrows, ncols, noise_sim_sigma,
-                                           params=params, max_hops=max_hops)
+                                           params=params, max_hops=max_hops, indexed_mask=indexed_mask)
             col = (field_to_vector(v_p) - field_to_vector(v_m)) / (2.0 * float(step))
             Jcols.append(col)
 
@@ -761,7 +766,7 @@ def one_step_geometry_refinement(
         # Residual b from SIM(det0) -> EXP
         _, v_before, roi_counts = expsim_fingerprint(
             xpat_4d, spat0, binning, nrows, ncols, noise_sim_sigma,
-            params=params, max_hops=max_hops
+            params=params, max_hops=max_hops, indexed_mask=indexed_mask,
         )
         b_full = field_to_vector(v_before)
         solve_sign = +1.0  # rhs = +J^T b
@@ -813,13 +818,15 @@ def one_step_geometry_refinement(
 
     # Residual fields (before/after) for plots
     _, v_before, _ = expsim_fingerprint(xpat_4d, spat0, binning, nrows, ncols,
-                                        noise_sim_sigma, params=params, max_hops=max_hops)
+                                        noise_sim_sigma, params=params, max_hops=max_hops,
+                                        indexed_mask=indexed_mask)
     spat1 = simulate_fn(master_pattern, oris_grid, det1, energy)
     if spat1.ndim == 3:
         Ny, Nx, _, _ = xpat_4d.shape
         spat1 = _N_to_nav(_stack_to_NHW(spat1), (Ny, Nx))
     _, v_after,  _ = expsim_fingerprint(xpat_4d, spat1, binning, nrows, ncols,
-                                        noise_sim_sigma, params=params, max_hops=max_hops)
+                                        noise_sim_sigma, params=params, max_hops=max_hops,
+                                        indexed_mask=indexed_mask)
 
     # --- Plots and GIFs
     j0, i0 = out_idx
@@ -911,12 +918,37 @@ def optimize_geometry_and_orientations(
     exp_NHW = _stack_to_NHW(exp_4d)
     j0, i0 = out_idx  # for GIFs
 
+    def _orientations(xm):
+        # xmap.orientations raises when phase_id contains both -1 (not_indexed)
+        # and an indexed phase.  Build Orientation from raw rotations instead.
+        from orix.quaternion import Orientation as _Ori
+        ids = np.unique(xm.phase_id[xm.phase_id != -1])
+        if ids.size != 1:
+            raise ValueError(
+                f"optimize_geometry_and_orientations requires exactly one indexed "
+                f"phase; got phase IDs {list(ids)}"
+            )
+        o = _Ori(xm.rotations.data)
+        o.symmetry = xm.phases[int(ids[0])].point_group
+        return o
+
     # Orientations grid: use exactly the nav shape of xpat
-    oris_full = xmap.orientations
+    oris_full = _orientations(xmap)
     try:
         oris_grid = oris_full.reshape(Ny, Nx)
     except Exception:
         oris_grid = oris_full
+
+    # Build indexed mask — exclude unindexed points from NCC and Jacobian
+    indexed_flat = (xmap.phase_id != -1).ravel()
+    indexed_mask = indexed_flat.reshape(Ny, Nx)
+    if not indexed_flat.all():
+        n_unindexed = int((~indexed_flat).sum())
+        print(f"[geom] {n_unindexed} unindexed point(s) will be excluded from NCC and Jacobian.")
+        if batch_indices is None:
+            batch_indices = np.where(indexed_flat)[0].tolist()
+        else:
+            batch_indices = [i for i in batch_indices if indexed_flat[i]]
 
     # initial state
     det = det0
@@ -964,6 +996,7 @@ def optimize_geometry_and_orientations(
             params=params, max_hops=max_hops,
             jacobian_method=jacobian_method,
             xmap=xmap_push,   # pass xmap so PCs auto-refresh if tilts changed
+            indexed_mask=indexed_mask,
         )
         det_g = result.get("det_refined", det)
         # --- Geometry-step diagnostics from one_step_geometry_refinement
@@ -1004,7 +1037,7 @@ def optimize_geometry_and_orientations(
             pseudo_symmetry_ops=pseudo_symmetry_ops,
             rtol=rtol,
         )
-        oris_o = xmap_ref.orientations
+        oris_o = _orientations(xmap_ref)
         try:
             oris_grid_o = oris_o.reshape(Ny, Nx)
         except Exception:

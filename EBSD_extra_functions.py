@@ -57,17 +57,62 @@ def make_flash_gif(pattern1, pattern2, outpath, duration=0.4, n_flashes=2):
     iio.imwrite(outpath, frames, loop=0, duration=dur_ms, format="GIF")
     return outpath
 
-def load_oxford_mp(mp_path):
-    # Loads an ebsd master pattern created using Oxford's AZtecCrystal software
-    with h5py.File(mp_path,'r') as f:
+def load_oxford_mp(mp_path, xmap=None):
+    """
+    Load an EBSD master pattern created using Oxford AZtecCrystal.
+
+    Parameters
+    ----------
+    mp_path : str
+        Path to the Oxford master pattern file.
+    xmap : orix.crystal_map.CrystalMap, optional
+        If provided, assign the master pattern phase from the indexed phase
+        in the crystal map. Handles phase IDs 1 or 0, and ignores -1
+        not-indexed pixels.
+
+    Returns
+    -------
+    mp : kikuchipy.signals.EBSDMasterPattern
+        Master pattern converted to Lambert projection, with phase assigned
+        if xmap is provided.
+    """
+    with h5py.File(mp_path, "r") as f:
         lower_hemisphere = f["Data/Master/Dynamical/Lower"][()]
         upper_hemisphere = f["Data/Master/Dynamical/Upper"][()]
+
     south_signal = hs.signals.Signal2D(lower_hemisphere)
     north_signal = hs.signals.Signal2D(upper_hemisphere)
-    mp = kp.signals.EBSDMasterPattern([north_signal, south_signal], hemisphere='both',) # Create the EBSDMasterPattern signal, explicitly setting hemispheres
-    mp.hemispheres = {"north", "south"} # Assign hemispheres
-    mp.projection = 'stereographic' #Assign projection
-    mp = mp.as_lambert() # Convert the master pattern to the square Lambert projection
+
+    mp = kp.signals.EBSDMasterPattern(
+        [north_signal, south_signal],
+        hemisphere="both",
+    )
+
+    mp.hemispheres = {"north", "south"}
+    mp.projection = "stereographic"
+    mp = mp.as_lambert()
+
+    if xmap is not None:
+        phase_ids = np.unique(xmap.phase_id)
+        phase_ids = phase_ids[phase_ids != -1]
+
+        if phase_ids.size == 0:
+            raise ValueError("No indexed phases found in xmap.")
+
+        # Prefer phase 1 if present, otherwise phase 0 if present,
+        # otherwise use the first indexed phase ID.
+        if 1 in xmap.phases.ids and 1 in phase_ids:
+            phase_id = 1
+        elif 0 in xmap.phases.ids and 0 in phase_ids:
+            phase_id = 0
+        else:
+            phase_id = int(phase_ids[0])
+
+        mp.phase = xmap.phases[phase_id]
+
+        print(f"Assigned master pattern phase from xmap phase ID {phase_id}:")
+        print(mp.phase)
+
     return mp
 
 def make_circular_signal_mask(h, w, radius_px=None, invert=True):
@@ -82,6 +127,95 @@ def make_circular_signal_mask(h, w, radius_px=None, invert=True):
     r = radius_px if radius_px is not None else min(h, w) / 2.0
     inside = (x - cx) ** 2 + (y - cy) ** 2 <= (r ** 2)
     return ~inside if invert else inside
+
+def crop_ebsd_to_square(ebsd, mask=None, p=1.0):
+    """
+    Crop EBSD patterns to a centered square.
+
+    Parameters
+    ----------
+    ebsd : kikuchipy.signals.EBSD
+        EBSD signal with data shape (Ny, Nx, py, px).
+    mask : None or "circular"
+        If None, crop to the largest centered square inside the rectangular pattern.
+        If "circular", crop to the largest centered square inside the circular mask.
+    p : float
+        Fraction of the square side to keep. Default is 1.0.
+        For example, p=0.9 crops an additional 10% of the square width.
+
+    Returns
+    -------
+    ebsd : kikuchipy.signals.EBSD
+        Cropped EBSD signal.
+    crop_info : dict
+        Dictionary with crop coordinates and final pattern shape.
+    """
+    if not (0 < p <= 1):
+        raise ValueError(f"p must be in the range (0, 1], got p={p}")
+
+    if mask not in [None, "circular"]:
+        raise ValueError("mask must be None or 'circular'")
+
+    Ny, Nx, py, px = ebsd.data.shape
+    dtype = ebsd.data.dtype
+
+    # Reset static background so crop_signal does not fail due to shape mismatch
+    ebsd.static_background = np.zeros((py, px), dtype=dtype)
+
+    cy = py // 2
+    cx = px // 2
+
+    if mask == "circular":
+        # Assume circular mask is centered and has diameter equal to the smaller
+        # pattern dimension. Largest inscribed square has side = diameter / sqrt(2).
+        diameter = min(py, px)
+        base_side = diameter / np.sqrt(2)
+
+    else:
+        # Largest square inside rectangular image
+        base_side = min(py, px)
+
+    # Apply additional fractional crop
+    side = int(np.floor(base_side * p))
+
+    # Make side even so the crop is symmetric around the center
+    if side % 2 == 1:
+        side -= 1
+
+    half_side = side // 2
+
+    top = cy - half_side
+    bottom = cy + half_side
+    left = cx - half_side
+    right = cx + half_side
+
+    if top < 0 or left < 0 or bottom > py or right > px:
+        raise ValueError(
+            "Computed crop extends outside the pattern. "
+            f"Pattern shape is ({py}, {px}), crop is "
+            f"top={top}, bottom={bottom}, left={left}, right={right}."
+        )
+
+    ebsd.crop_signal(
+        top=top,
+        bottom=bottom,
+        left=left,
+        right=right,
+    )
+
+    crop_info = {
+        "original_pattern_shape": (py, px),
+        "cropped_pattern_shape": ebsd.data.shape[-2:],
+        "top": top,
+        "bottom": bottom,
+        "left": left,
+        "right": right,
+        "side": side,
+        "mask": mask,
+        "p": p,
+    }
+
+    return ebsd, crop_info
 
 def EBSD_subset(xpat, det, xmap, n_points=None, indices=None, indices_shape=None):
     """
@@ -354,30 +488,20 @@ def xmap_PS(xmap_old, PS_operation):
     )
     return xmap_PSvar
 
-def crop_detector(det, new_shape, corners):
+def crop_detector(det, corners):
     """
-    crops detector, revising pc values
+    Crop detector and update PC values.
 
-    PARAMETERS
-    ----------
-    det: detector
-    new_shape: (py, px)
-    corners: (x0, x1, y0, y1)
-    
-    OUTPUT
-    ------
-    new cropped detector
+    corners should match kikuchipy's EBSDDetector.crop() extent:
+    (y0, y1, x0, x1)
     """
-    det_cropped = kp.detectors.EBSDDetector(
-            shape=new_shape,
-            pc=det.crop(corners).pc_average,
-            sample_tilt=det.sample_tilt,
-            tilt=det.tilt,
-            azimuthal=det.azimuthal,
-            px_size=det.px_size,
-            binning=det.binning,
-            )
-    return det_cropped    
+    det_cropped = det.crop(corners)
+
+    # det.crop() should already preserve geometry, but ensure twist is retained
+    if hasattr(det, "twist") and hasattr(det_cropped, "twist"):
+        det_cropped.twist = det.twist
+
+    return det_cropped
 
 def choose_nav_chunks(ny, nx, target=100, min_chunk=16, max_chunk=None):
     """
@@ -449,6 +573,506 @@ def save_metrics_h5(
                 del grp[name]
             grp.create_dataset(name, data=arr, compression="gzip")
     return out_h5_path
+
+# ======================= Parallel pattern processing ========================
+
+def cast_processed_patterns_to_dtype(block, out_dtype, cast_mode="rescale_per_pattern"):
+    """
+    Cast processed EBSD patterns to the target H5 dtype.
+
+    Parameters
+    ----------
+    block : ndarray
+        Pattern block with shape (..., py, px).
+    out_dtype : dtype
+        Target dtype, usually the H5 pattern dataset dtype.
+    cast_mode : {"clip", "rescale_per_pattern", "rescale_block"}
+        "clip":
+            Clip directly to dtype range and cast.
+        "rescale_per_pattern":
+            Rescale each pattern independently to dtype range.
+        "rescale_block":
+            Rescale whole block using one min/max.
+    """
+    import numpy as np
+
+    out_dtype = np.dtype(out_dtype)
+    block = np.asarray(block)
+
+    if np.issubdtype(out_dtype, np.floating):
+        return block.astype(out_dtype, copy=False)
+
+    if not np.issubdtype(out_dtype, np.integer):
+        return block.astype(out_dtype, copy=False)
+
+    info = np.iinfo(out_dtype)
+    out_min = float(info.min)
+    out_max = float(info.max)
+
+    block = np.asarray(block, dtype=np.float32)
+
+    if cast_mode == "clip":
+        out = np.clip(block, out_min, out_max)
+
+    elif cast_mode == "rescale_block":
+        mn = np.nanmin(block)
+        mx = np.nanmax(block)
+
+        if mx > mn:
+            out = (block - mn) / (mx - mn)
+            out = out_min + out * (out_max - out_min)
+        else:
+            out = np.zeros_like(block, dtype=np.float32) + out_min
+
+    elif cast_mode == "rescale_per_pattern":
+        mn = np.nanmin(block, axis=(-2, -1), keepdims=True)
+        mx = np.nanmax(block, axis=(-2, -1), keepdims=True)
+        denom = mx - mn
+
+        out = np.zeros_like(block, dtype=np.float32)
+        np.divide(block - mn, denom, out=out, where=denom > 0)
+        out = out_min + out * (out_max - out_min)
+
+    else:
+        raise ValueError(
+            f"Unknown cast_mode={cast_mode!r}. "
+            "Use 'clip', 'rescale_per_pattern', or 'rescale_block'."
+        )
+
+    return np.rint(out).astype(out_dtype)
+
+
+def process_part1a_block(
+    block,
+    best_params,
+    out_dtype=None,
+    cast_mode="rescale_per_pattern",
+):
+    """
+    Process one EBSD navigation block using the optimized Part1A parameters.
+
+    Parameters
+    ----------
+    block : ndarray
+        Pattern block with shape (by, bx, py, px).
+    best_params : dict
+        Optimized Part1A processing parameters.
+    out_dtype : dtype or None
+        Target output dtype. If None, keeps processed dtype.
+    cast_mode : str
+        Passed to cast_processed_patterns_to_dtype().
+
+    Returns
+    -------
+    out : ndarray
+        Processed block with shape (by, bx, py, px).
+    """
+    import numpy as np
+    import kikuchipy as kp
+    import gc
+
+    block = np.asarray(block)
+    by, bx, py, px = block.shape
+
+    sig = kp.signals.EBSD(block)
+    sig.static_background = np.zeros((py, px), dtype=block.dtype)
+
+    # 1) Dynamic background subtraction
+    sig = sig.remove_dynamic_background(
+        operation="subtract",
+        filter_domain="frequency",
+        std=best_params["DBS_std"],
+        truncate=best_params["DBS_trunc"],
+        inplace=False,
+        show_progressbar=False,
+    )
+
+    # 2) Adaptive histogram equalization
+    if bool(best_params.get("AHE_on", True)):
+        sig = sig.adaptive_histogram_equalization(
+            kernel_size=(best_params["AHE_kernel"], best_params["AHE_kernel"]),
+            clip_limit=best_params["AHE_clip"],
+            nbins=best_params["AHE_nbins"],
+            inplace=False,
+            show_progressbar=False,
+        )
+
+    # 3) FFT filter
+    pattern_shape = (py, px)
+
+    w_low = kp.filters.Window(
+        window="lowpass",
+        cutoff=best_params["FFT_cutL"],
+        cutoff_width=10,
+        shape=pattern_shape,
+    )
+    w_high = kp.filters.Window(
+        window="highpass",
+        cutoff=best_params["FFT_cutH"],
+        cutoff_width=2,
+        shape=pattern_shape,
+    )
+
+    sig = sig.fft_filter(
+        transfer_function=w_low * w_high,
+        function_domain="frequency",
+        shift=True,
+        inplace=False,
+        show_progressbar=False,
+    )
+
+    out = np.asarray(sig.data)
+
+    if out_dtype is not None:
+        out = cast_processed_patterns_to_dtype(
+            out,
+            out_dtype=out_dtype,
+            cast_mode=cast_mode,
+        )
+
+    del sig
+    gc.collect()
+
+    return out
+
+
+def write_dask_pattern_array_to_h5_from_driver(
+    data,
+    h5_template,
+    h5_out,
+    client,
+    Ny,
+    Nx,
+    py,
+    px,
+    pattern_path="Scan 1/EBSD/Data/patterns",
+    chunk_y=32,
+    chunk_x=32,
+    max_in_flight=4,
+    overwrite=True,
+    out_dtype=None,
+    cast_mode=None,
+):
+    """
+    Compute a Dask pattern array chunk-by-chunk and write it to H5 from the driver.
+
+    This avoids collecting the full pattern stack into driver memory and avoids
+    sending writable h5py objects to Dask workers.
+
+    Parameters
+    ----------
+    data : dask.array.Array
+        Pattern array with shape (Ny, Nx, py, px).
+    h5_template : str
+        Existing H5 file to copy as metadata/template.
+    h5_out : str
+        Output H5 file path. Must not equal h5_template unless h5_out is a temp file.
+    client : dask.distributed.Client
+        Existing Dask client.
+    Ny, Nx, py, px : int
+        EBSD dimensions.
+    pattern_path : str
+        H5 path to pattern dataset.
+    chunk_y, chunk_x : int
+        Navigation chunk sizes.
+    max_in_flight : int
+        Number of chunks submitted to workers at once.
+    overwrite : bool
+        Whether to overwrite h5_out if it exists.
+    out_dtype : dtype or None
+        If provided, cast data to this dtype before writing. If None, use H5 dtype.
+    cast_mode : None or str
+        If provided, use cast_processed_patterns_to_dtype() per chunk. This is useful
+        for per-pattern normalization. If None, simple Dask astype/clip behavior is used.
+    """
+    import os
+    import shutil
+    import time
+    import numpy as np
+    import h5py
+    import dask.array as da
+    from dask.array.core import slices_from_chunks
+    from dask.distributed import as_completed
+
+    t0 = time.time()
+
+    if os.path.abspath(h5_out) == os.path.abspath(h5_template):
+        raise ValueError(
+            "h5_out equals h5_template. Use a temporary output path, then os.replace()."
+        )
+
+    if os.path.exists(h5_out):
+        if overwrite:
+            print(f"Removing existing output file: {h5_out}")
+            os.remove(h5_out)
+        else:
+            raise FileExistsError(f"Output already exists: {h5_out}")
+
+    print(f"Copying H5 template:\n  from: {h5_template}\n  to:   {h5_out}")
+    shutil.copyfile(h5_template, h5_out)
+
+    with h5py.File(h5_out, "r") as f:
+        if pattern_path not in f:
+            raise ValueError(f"{pattern_path} not found in {h5_out}")
+
+        dset_shape = f[pattern_path].shape
+        dset_dtype = np.dtype(f[pattern_path].dtype)
+
+    if dset_shape == (Ny, Nx, py, px):
+        h5_layout = "nav"
+    elif dset_shape == (Ny * Nx, py, px):
+        h5_layout = "flat"
+    else:
+        raise ValueError(
+            f"Unexpected H5 pattern shape {dset_shape}. "
+            f"Expected {(Ny, Nx, py, px)} or {(Ny * Nx, py, px)}."
+        )
+
+    if out_dtype is None:
+        out_dtype = dset_dtype
+    out_dtype = np.dtype(out_dtype)
+
+    print("Output H5 pattern shape:", dset_shape)
+    print("Output H5 pattern dtype:", dset_dtype)
+    print("Write dtype:", out_dtype)
+    print("H5 layout:", h5_layout)
+
+    arr = data.rechunk((min(chunk_y, Ny), min(chunk_x, Nx), -1, -1))
+
+    if cast_mode is not None:
+        # Use map_blocks so each block can be normalized/cast independently.
+        arr = arr.map_blocks(
+            cast_processed_patterns_to_dtype,
+            out_dtype=out_dtype,
+            cast_mode=cast_mode,
+            dtype=out_dtype,
+        )
+    elif np.dtype(arr.dtype) != out_dtype:
+        if np.issubdtype(out_dtype, np.integer):
+            info = np.iinfo(out_dtype)
+            arr = da.clip(arr, info.min, info.max).astype(out_dtype)
+        else:
+            arr = arr.astype(out_dtype)
+
+    print("Dask array to write:", arr)
+    print("Write chunks:", arr.chunks)
+
+    block_slices = list(slices_from_chunks(arr.chunks))
+    block_delayed = arr.to_delayed().flatten().tolist()
+
+    if len(block_slices) != len(block_delayed):
+        raise RuntimeError(
+            f"Mismatch: {len(block_slices)} slices but "
+            f"{len(block_delayed)} delayed chunks."
+        )
+
+    total_chunks = len(block_delayed)
+    max_in_flight = max(1, int(max_in_flight))
+
+    print(f"Total chunks to write: {total_chunks}")
+    print(f"Max in-flight chunks: {max_in_flight}")
+
+    with h5py.File(h5_out, "r+") as f:
+        dset = f[pattern_path]
+
+        futures = {}
+        submitted = 0
+        completed = 0
+
+        def submit_one(submitted_idx):
+            if submitted_idx >= total_chunks:
+                return submitted_idx, None
+
+            fut = client.compute(block_delayed[submitted_idx])
+            futures[fut] = block_slices[submitted_idx]
+            submitted_idx += 1
+            return submitted_idx, fut
+
+        for _ in range(min(max_in_flight, total_chunks)):
+            submitted, _ = submit_one(submitted)
+
+        ac = as_completed(list(futures.keys()))
+
+        for fut in ac:
+            block_slice = futures.pop(fut)
+            block = fut.result()
+
+            sy, sx, spy, spx = block_slice
+            y0, y1 = sy.start, sy.stop
+            x0, x1 = sx.start, sx.stop
+
+            if spy != slice(0, py, None) or spx != slice(0, px, None):
+                raise RuntimeError(f"Unexpected signal slice: {spy}, {spx}")
+
+            if h5_layout == "nav":
+                dset[y0:y1, x0:x1, :, :] = block
+
+            elif h5_layout == "flat":
+                for local_y, global_y in enumerate(range(y0, y1)):
+                    row0 = global_y * Nx + x0
+                    row1 = global_y * Nx + x1
+                    dset[row0:row1, :, :] = block[local_y, :, :, :]
+
+            completed += 1
+
+            if completed % max(1, total_chunks // 20) == 0 or completed == total_chunks:
+                elapsed = time.time() - t0
+                print(
+                    f"Wrote {completed}/{total_chunks} chunks "
+                    f"({100 * completed / total_chunks:.1f}%) "
+                    f"after {elapsed:.2f} s"
+                )
+                f.flush()
+
+            submitted, new_fut = submit_one(submitted)
+            if new_fut is not None:
+                ac.add(new_fut)
+
+        f.flush()
+
+    print(f"Finished writing H5: {h5_out}")
+    print(f"Total write time: {time.time() - t0:.2f} s")
+    return h5_out
+
+
+def create_kp_h5_template(h5_path, ebsd, Ny, Nx, py_c, px_c, chunk_y=32, chunk_x=32):
+    """
+    Create a kikuchipy-format h5 template with correct metadata and a
+    pre-allocated empty patterns dataset of shape (Ny*Nx, py_c, px_c).
+
+    Writes the file directly with h5py using the same internal serialisation
+    helpers that kikuchipy's own writer uses (_dict2hdf5group, crystalmap2dict),
+    so the resulting structure is identical to a file produced by
+    kp.signals.EBSD.save() and can be read back with kp.load().
+
+    No pattern data is read from the full stack; the patterns dataset is
+    pre-allocated with zeros and filled in later by
+    write_dask_pattern_array_to_h5_from_driver().
+
+    Parameters
+    ----------
+    h5_path : str
+        Output path (will be overwritten if it exists).
+    ebsd : kikuchipy.signals.EBSD
+        Lazy EBSD signal with xmap, detector, and static_background already
+        set to their final values (post-crop, post-convention-conversion).
+    Ny, Nx : int
+        Full map navigation dimensions (rows, columns).
+    py_c, px_c : int
+        Cropped pattern dimensions (signal shape).
+    chunk_y, chunk_x : int
+        Navigation chunk sizes used when pre-allocating the patterns dataset.
+    """
+    import numpy as np
+    import h5py
+    from kikuchipy import __version__ as kp_version
+    from orix import __version__ as orix_version
+    from orix.io.plugins.orix_hdf5 import crystalmap2dict
+    from kikuchipy.io.plugins._h5ebsd import _dict2hdf5group
+
+    N = Ny * Nx
+    det = ebsd.detector
+
+    # --- PC: normalise to (Ny, Nx) regardless of original storage shape ---
+    pc = np.asarray(det.pc).reshape(-1, 3)
+    if pc.shape[0] == 1:
+        pc = np.tile(pc, (N, 1))
+    pc = pc.reshape(Ny, Nx, 3)
+    pcx = pc[:, :, 0].astype(np.float64)
+    pcy = pc[:, :, 1].astype(np.float64)
+    pcz = pc[:, :, 2].astype(np.float64)
+
+    # --- static background ---
+    static_bg = ebsd.static_background
+    if static_bg is None:
+        static_bg = -1  # kikuchipy convention for missing background
+    else:
+        static_bg = np.asarray(static_bg)
+
+    with h5py.File(h5_path, "w") as f:
+
+        # Root datasets "manufacturer" and "version" are written by
+        # kikuchipy.io.plugins._h5ebsd._dict2hdf5group, which is the same
+        # helper KikuchipyH5EBSDWriter.write() uses.  kikuchipy checks
+        # manufacturer == "kikuchipy" when opening the file.
+        _dict2hdf5group(
+            {"manufacturer": "kikuchipy", "version": kp_version},
+            f["/"],
+        )
+
+        scan = f.create_group("Scan 1")
+
+        # Crystal map group written via orix.io.plugins.orix_hdf5.crystalmap2dict,
+        # which is the same serialiser orix uses internally.  On load, kikuchipy
+        # passes this group to dict2crystalmap (orix_hdf5) to reconstruct the
+        # CrystalMap, including all phase / lattice / space-group information.
+        # Using crystalmap2dict here avoids any CrystalMap / signal navigation-
+        # shape validation (the source of the previous ValueError).
+        _dict2hdf5group(
+            {
+                "manufacturer": "orix",
+                "version": orix_version,
+                "crystal_map": crystalmap2dict(ebsd.xmap),
+            },
+            scan.create_group("EBSD/CrystalMap"),
+        )
+
+        # Patterns dataset: pre-allocated with zeros.  Shape (N, py_c, px_c)
+        # matches the "flat" layout expected by write_dask_pattern_array_to_h5_from_driver
+        # and by KikuchipyH5EBSDReader.scan2dict (which reshapes to (Ny, Nx, py, px)
+        # using n_rows / n_columns from the EBSD header).
+        data_grp = scan.create_group("EBSD/Data")
+        data_grp.create_dataset(
+            "patterns",
+            shape=(N, py_c, px_c),
+            dtype=ebsd.data.dtype,
+            chunks=(min(chunk_y * chunk_x, N), py_c, px_c),
+            fillvalue=0,
+        )
+
+        # EBSD header written via _dict2hdf5group.  Field names and value sources
+        # match KikuchipyH5EBSDWriter.write() exactly.  On load, KikuchipyH5EBSDReader
+        # .scan2dict reads these fields to reconstruct ny/nx/sy/sx and to build
+        # the EBSDDetector (elevation_angle -> tilt, azimuth_angle -> azimuthal,
+        # detector_pixel_size -> px_size, sample_tilt -> sample_tilt, pcx/pcy/pcz).
+        _dict2hdf5group(
+            {
+                "azimuth_angle":        float(det.azimuthal),
+                "binning":              float(det.binning),
+                "elevation_angle":      float(det.tilt),
+                "n_columns":            Nx,
+                "n_rows":               Ny,
+                "pattern_width":        px_c,
+                "pattern_height":       py_c,
+                "pcx":                  pcx,          # (Ny, Nx) float64
+                "pcy":                  pcy,          # (Ny, Nx) float64
+                "pcz":                  pcz,          # (Ny, Nx) float64
+                "detector_pixel_size":  float(det.px_size),
+                "sample_tilt":          float(det.sample_tilt),
+                "static_background":    static_bg,    # array or -1 if not set
+                "step_x":               float(ebsd.xmap.dx),
+                "step_y":               float(ebsd.xmap.dy),
+            },
+            scan.create_group("EBSD/Header"),
+        )
+
+        # SEM header required by KikuchipyH5EBSDReader.scan2dict for the
+        # "Acquisition_instrument.SEM" metadata block; not used by the pipeline.
+        _dict2hdf5group(
+            {
+                "beam_energy":      0.0,
+                "magnification":    0.0,
+                "microscope":       "",
+                "working_distance": 0.0,
+            },
+            scan.create_group("SEM/Header"),
+        )
+
+    print(
+        f"Created h5 template: Ny={Ny}, Nx={Nx}, py={py_c}, px={px_c}, "
+        f"patterns=({N}, {py_c}, {px_c}), chunk=({min(chunk_y*chunk_x, N)}, {py_c}, {px_c})"
+    )
+
 
 # ======================= CI_wcc caluclations ================================
 DTYPE = np.float64
